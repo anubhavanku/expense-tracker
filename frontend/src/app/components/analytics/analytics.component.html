@@ -1,0 +1,82 @@
+<div class="analytics-container">
+  <h2>Analytics</h2>
+
+  <!-- KPI Cards -->
+  <div class="kpi-row">
+    <mat-card class="kpi-card">
+      <div class="kpi-icon" style="background:#e8eaf6">💰</div>
+      <div class="kpi-label">Total Spent</div>
+      <div class="kpi-value">₹{{ totalSpent | number:'1.2-2' }}</div>
+    </mat-card>
+
+    <mat-card class="kpi-card">
+      <div class="kpi-icon" style="background:#e0f2f1">📅</div>
+      <div class="kpi-label">Avg Per Day</div>
+      <div class="kpi-value">₹{{ avgPerDay | number:'1.2-2' }}</div>
+    </mat-card>
+
+    <mat-card class="kpi-card">
+      <div class="kpi-icon" style="background:#fce4ec">🧾</div>
+      <div class="kpi-label">Avg Per Transaction</div>
+      <div class="kpi-value">₹{{ avgPerTransaction | number:'1.2-2' }}</div>
+    </mat-card>
+
+    <mat-card class="kpi-card">
+      <div class="kpi-icon" style="background:#fff3e0">🏆</div>
+      <div class="kpi-label">Highest Expense</div>
+      <div class="kpi-value">₹{{ highestExpense?.amount | number:'1.2-2' }}</div>
+      <div class="kpi-sub">{{ highestExpense?.title }}</div>
+    </mat-card>
+
+    <mat-card class="kpi-card">
+      <div class="kpi-icon" style="background:#f3e5f5">🔁</div>
+      <div class="kpi-label">Most Frequent</div>
+      <div class="kpi-value small">{{ mostFrequentCategory }}</div>
+    </mat-card>
+  </div>
+
+  <!-- Charts Row 1 -->
+  <div class="charts-row">
+    <mat-card class="chart-card">
+      <mat-card-header>
+        <mat-card-title>Spending by Category</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <canvas baseChart
+          [data]="categoryBarData"
+          [type]="categoryBarType"
+          [options]="categoryBarOptions">
+        </canvas>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="chart-card">
+      <mat-card-header>
+        <mat-card-title>Category Distribution</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <canvas baseChart
+          [data]="doughnutData"
+          [type]="doughnutType"
+          [options]="doughnutOptions">
+        </canvas>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Monthly Trend Full Width -->
+  <mat-card class="chart-card trend-card">
+    <mat-card-header>
+      <mat-card-title>Monthly Spending Trend</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="trend-wrapper">
+        <canvas baseChart
+          [data]="trendData"
+          [type]="trendType"
+          [options]="trendOptions">
+        </canvas>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

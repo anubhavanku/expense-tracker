@@ -1,0 +1,99 @@
+<div class="profile-container">
+  <h2>My Profile</h2>
+
+  <div class="profile-layout">
+    <!-- Left: Avatar + Stats -->
+    <div class="profile-sidebar">
+      <mat-card class="avatar-card">
+        <div class="avatar">{{ getInitials() }}</div>
+        <div class="username">{{ authService.getCurrentUser()?.username }}</div>
+        <div class="email">{{ authService.getCurrentUser()?.email }}</div>
+      </mat-card>
+
+      <mat-card class="stats-card">
+        <mat-card-header>
+          <mat-card-title>Account Stats</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="stat-row">
+            <span class="stat-label">💰 Total Spent</span>
+            <span class="stat-val">₹{{ totalExpenses | number:'1.2-2' }}</span>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="stat-row">
+            <span class="stat-label">🧾 Transactions</span>
+            <span class="stat-val">{{ expenseCount }}</span>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="stat-row">
+            <span class="stat-label">📊 Top Category</span>
+            <span class="stat-val">{{ topCategory }}</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Right: Edit Forms -->
+    <div class="profile-main">
+      <mat-tab-group [(selectedIndex)]="activeTab">
+
+        <!-- Edit Profile Tab -->
+        <mat-tab label="Edit Profile">
+          <mat-card class="form-card">
+            <mat-card-content>
+              <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Username</mat-label>
+                  <mat-icon matPrefix>person</mat-icon>
+                  <input matInput formControlName="username">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Email</mat-label>
+                  <mat-icon matPrefix>email</mat-icon>
+                  <input matInput formControlName="email" type="email">
+                </mat-form-field>
+
+                <button mat-raised-button color="primary" type="submit" [disabled]="profileForm.invalid">
+                  Save Changes
+                </button>
+              </form>
+            </mat-card-content>
+          </mat-card>
+        </mat-tab>
+
+        <!-- Change Password Tab -->
+        <mat-tab label="Change Password">
+          <mat-card class="form-card">
+            <mat-card-content>
+              <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Current Password</mat-label>
+                  <mat-icon matPrefix>lock</mat-icon>
+                  <input matInput formControlName="currentPassword" type="password">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>New Password</mat-label>
+                  <mat-icon matPrefix>lock_open</mat-icon>
+                  <input matInput formControlName="newPassword" type="password">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Confirm New Password</mat-label>
+                  <mat-icon matPrefix>lock_open</mat-icon>
+                  <input matInput formControlName="confirmPassword" type="password">
+                </mat-form-field>
+
+                <button mat-raised-button color="primary" type="submit" [disabled]="passwordForm.invalid">
+                  Change Password
+                </button>
+              </form>
+            </mat-card-content>
+          </mat-card>
+        </mat-tab>
+
+      </mat-tab-group>
+    </div>
+  </div>
+</div>

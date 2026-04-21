@@ -1,0 +1,54 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+export interface Expense {
+  id?: number;
+  title: string;
+  description: string;
+  amount: number;
+  category: string;
+  expenseDate: string;
+  userId: number;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ExpenseService {
+  private apiUrl = 'http://localhost:8080/api/expenses';
+
+  constructor(private http: HttpClient) {}
+
+  createExpense(expense: Expense): Observable<Expense> {
+    return this.http.post<Expense>(this.apiUrl, expense);
+  }
+
+  getExpensesByUser(userId: number): Observable<Expense[]> {
+    return this.http.get<Expense[]>(`${this.apiUrl}/user/${userId}`);
+  }
+
+  getExpensesByCategory(userId: number, category: string): Observable<Expense[]> {
+    return this.http.get<Expense[]>(`${this.apiUrl}/user/${userId}/category/${category}`);
+  }
+
+  getExpensesByDateRange(userId: number, start: string, end: string): Observable<Expense[]> {
+    return this.http.get<Expense[]>(`${this.apiUrl}/user/${userId}/range?start=${start}&end=${end}`);
+  }
+
+  updateExpense(id: number, expense: Expense): Observable<Expense> {
+    return this.http.put<Expense>(`${this.apiUrl}/${id}`, expense);
+  }
+
+  deleteExpense(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  getTotalExpenses(userId: number): Observable<number> {
+    return this.http.get<number>(`${this.apiUrl}/user/${userId}/total`);
+  }
+
+  getSummaryByCategory(userId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/user/${userId}/summary`);
+  }
+}

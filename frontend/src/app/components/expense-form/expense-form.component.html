@@ -1,0 +1,41 @@
+<mat-card class="form-card">
+  <mat-card-header>
+    <mat-card-title>{{ expenseToEdit ? 'Edit Expense' : 'Add Expense' }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="expenseForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Title</mat-label>
+        <input matInput formControlName="title" placeholder="Expense title">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Description</mat-label>
+        <input matInput formControlName="description" placeholder="Optional description">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Amount (₹)</mat-label>
+        <input matInput formControlName="amount" type="number" placeholder="0.00">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Category</mat-label>
+        <mat-select formControlName="category">
+          <mat-option *ngFor="let cat of categories" [value]="cat">{{ cat }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="expenseDate">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" class="full-width">
+        {{ expenseToEdit ? 'Update' : 'Add Expense' }}
+      </button>
+    </form>
+  </mat-card-content>
+</mat-card>

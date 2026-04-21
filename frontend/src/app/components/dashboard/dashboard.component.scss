@@ -1,0 +1,140 @@
+.dashboard-container {
+  padding: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+  h2 { font-size: 24px; font-weight: 600; margin-bottom: 20px; }
+}
+
+.stats-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  flex: 1;
+  text-align: center;
+  padding: 16px;
+  mat-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.stat-label { font-size: 13px; color: #666; }
+.stat-value {
+  font-size: 28px;
+  font-weight: bold;
+  color: #3f51b5;
+  &.small { font-size: 20px; }
+}
+
+// Budget Card
+.budget-card {
+  margin-bottom: 24px;
+  padding: 16px;
+  border-left: 4px solid #3f51b5;
+  &.warning { border-left-color: #ff9800; }
+  &.danger { border-left-color: #f44336; }
+}
+
+.budget-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.budget-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.budget-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.budget-field {
+  width: 160px;
+  margin: 0 !important;
+  .mat-form-field-wrapper { padding-bottom: 0; }
+}
+
+.budget-amounts {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #555;
+  strong { color: #333; }
+}
+
+.budget-percent {
+  text-align: right;
+  font-size: 12px;
+  color: #888;
+  margin-top: 4px;
+}
+
+.budget-message {
+  margin-top: 8px;
+  font-size: 13px;
+  &.danger-msg { color: #f44336; }
+  &.warning-msg { color: #e65100; }
+  &.safe-msg { color: #2e7d32; }
+}
+
+strong.danger { color: #f44336; }
+strong.warning { color: #e65100; }
+strong.safe { color: #2e7d32; }
+
+// Charts
+.charts-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.chart-card {
+    flex: 1;
+    padding: 16px;
+    margin-bottom: 0;
+
+    canvas {
+        max-height: 300px;
+    }
+
+    &.full-width-chart {
+        flex: none;
+        width: 100%;
+        margin-bottom: 24px;
+
+        .chart-wrapper {
+            position: relative;
+            height: 200px;
+            width: 100%;
+        }
+
+        canvas {
+            max-height: unset;
+        }
+    }
+}
+
+.recent-card { padding: 16px; }
