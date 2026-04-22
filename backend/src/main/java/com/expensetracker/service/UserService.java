@@ -42,6 +42,21 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
+//    public UserDTO updateUser(Long id, String username, String email) {
+//        User user = userRepository.findById(id)
+//                .orElseThrow(() -> new RuntimeException("User not found"));
+//        user.setUsername(username);
+//        user.setEmail(email);
+//        return mapToDTO(userRepository.save(user));
+//    }
+//
+//    public void updatePassword(Long id, String newPassword) {
+//        User user = userRepository.findById(id)
+//                .orElseThrow(() -> new RuntimeException("User not found"));
+//        user.setPassword(passwordEncoder.encode(newPassword));
+//        userRepository.save(user);
+//    }
+
     public UserDTO updateUser(Long id, String username, String email) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));

@@ -29,7 +29,12 @@ export class LoginComponent {
       const { email, password } = this.loginForm.value;
       this.authService.login(email, password).subscribe({
         next: () => this.router.navigate(['/dashboard']),
-        error: () => this.snackBar.open('Invalid credentials', 'Close', { duration: 3000 })
+        error: (err) => {
+          const msg = err.status === 401
+            ? 'Invalid email or password'
+            : 'Login failed. Please try again.';
+          this.snackBar.open(msg, 'Close', { duration: 3000 });
+        }
       });
     }
   }

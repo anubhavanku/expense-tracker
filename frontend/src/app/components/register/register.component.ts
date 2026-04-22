@@ -30,11 +30,13 @@ export class RegisterComponent {
       const { username, email, password } = this.registerForm.value;
       this.authService.register(username, email, password).subscribe({
         next: () => {
-          this.snackBar.open('Registered successfully! Please login.', 'Close', { duration: 3000 });
-          this.router.navigate(['/login']);
+          this.snackBar.open(
+            'Registered successfully! Welcome aboard 🎉',
+            'Close', { duration: 3000 });
+          this.router.navigate(['/dashboard']);
         },
         error: (err) => {
-          const msg = err.error?.message || err.message || 'Registration failed';
+          const msg = err.error?.message || 'Registration failed';
           this.snackBar.open(msg, 'Close', { duration: 3000 });
         }
       });
