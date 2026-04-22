@@ -42,6 +42,11 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
+    public User findByEmailOrUsername(String identifier) {
+        return userRepository.findByEmailOrUsername(identifier)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
 //    public UserDTO updateUser(Long id, String username, String email) {
 //        User user = userRepository.findById(id)
 //                .orElseThrow(() -> new RuntimeException("User not found"));

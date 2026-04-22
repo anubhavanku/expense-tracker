@@ -11,6 +11,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class RegisterComponent {
   registerForm: FormGroup;
+  showPassword = false;
 
   constructor(
     private fb: FormBuilder,

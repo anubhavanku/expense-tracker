@@ -13,7 +13,7 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
 })
 export class ExpenseListComponent implements OnInit {
   expenses: Expense[] = [];
-  displayedColumns = ['date', 'title', 'category', 'amount', 'actions'];
+  displayedColumns = ['date', 'title', 'type', 'category', 'amount', 'actions'];
   selectedExpense: Expense | null = null;
   showForm = false;
   filterForm: FormGroup;
@@ -96,5 +96,17 @@ export class ExpenseListComponent implements OnInit {
 
   getTotalAmount(): number {
     return this.expenses.reduce((sum, e) => sum + Number(e.amount), 0);
+  }
+
+  getTotalIncome(): number {
+    return this.expenses
+      .filter(e => e.type === 'INCOME')
+      .reduce((sum, e) => sum + Number(e.amount), 0);
+  }
+
+  getTotalExpenses(): number {
+    return this.expenses
+      .filter(e => e.type === 'EXPENSE')
+      .reduce((sum, e) => sum + Number(e.amount), 0);
   }
 }

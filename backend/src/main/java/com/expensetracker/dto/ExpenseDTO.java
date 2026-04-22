@@ -13,4 +13,5 @@ public class ExpenseDTO {
     private String category;
     private LocalDate expenseDate;
     private Long userId;
+    private String type;
 }

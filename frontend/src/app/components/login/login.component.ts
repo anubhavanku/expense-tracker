@@ -11,6 +11,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class LoginComponent {
   loginForm: FormGroup;
+  showPassword = false;
 
   constructor(
     private fb: FormBuilder,
@@ -19,7 +20,7 @@ export class LoginComponent {
     private snackBar: MatSnackBar
   ) {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', Validators.required],
       password: ['', Validators.required]
     });
   }
@@ -31,7 +32,7 @@ export class LoginComponent {
         next: () => this.router.navigate(['/dashboard']),
         error: (err) => {
           const msg = err.status === 401
-            ? 'Invalid email or password'
+            ? 'Invalid credentials. Please try again.'
             : 'Login failed. Please try again.';
           this.snackBar.open(msg, 'Close', { duration: 3000 });
         }

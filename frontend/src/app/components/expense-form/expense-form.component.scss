@@ -1,7 +1,42 @@
 .form-card {
   padding: 16px;
   margin: 16px;
+  transition: border-top 0.3s ease;
+
+  &.income-card {
+    border-top: 4px solid #2e7d32;
+  }
+
+  &.expense-card {
+    border-top: 4px solid #c62828;
+  }
 }
+
+.type-toggle {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+
+  button {
+    flex: 1;
+    padding: 8px;
+    font-weight: 500;
+    transition: all 0.2s;
+
+    &.active-expense {
+      background: #c62828;
+      color: white;
+      border-color: #c62828;
+    }
+
+    &.active-income {
+      background: #2e7d32;
+      color: white;
+      border-color: #2e7d32;
+    }
+  }
+}
+
 .full-width {
   width: 100%;
   margin-bottom: 16px;

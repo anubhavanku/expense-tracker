@@ -1,6 +1,8 @@
 package com.expensetracker.model;
 
 import jakarta.persistence.*;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -26,6 +28,14 @@ public class Expense {
 
     @Column(nullable = false)
     private String category;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private TransactionType type = TransactionType.EXPENSE;
+
+    public enum TransactionType {
+        INCOME, EXPENSE
+    }
 
     @Column(name = "expense_date", nullable = false)
     private LocalDate expenseDate;

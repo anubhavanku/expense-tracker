@@ -1,17 +1,32 @@
-<mat-card class="form-card">
+<mat-card class="form-card" [ngClass]="isIncome ? 'income-card' : 'expense-card'">
   <mat-card-header>
-    <mat-card-title>{{ expenseToEdit ? 'Edit Expense' : 'Add Expense' }}</mat-card-title>
+    <mat-card-title>
+      {{ expenseToEdit ? 'Edit Transaction' : 'Add Transaction' }}
+    </mat-card-title>
   </mat-card-header>
   <mat-card-content>
     <form [formGroup]="expenseForm" (ngSubmit)="onSubmit()">
+
+      <!-- Type Toggle -->
+      <div class="type-toggle">
+        <button type="button" mat-stroked-button [ngClass]="{'active-expense': !isIncome}"
+          (click)="expenseForm.patchValue({type: 'EXPENSE'})">
+          📤 Expense
+        </button>
+        <button type="button" mat-stroked-button [ngClass]="{'active-income': isIncome}"
+          (click)="expenseForm.patchValue({type: 'INCOME'})">
+          📥 Income
+        </button>
+      </div>
+
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Title</mat-label>
-        <input matInput formControlName="title" placeholder="Expense title">
+        <input matInput formControlName="title" [placeholder]="isIncome ? 'e.g. Monthly Salary' : 'e.g. Groceries'">
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Description</mat-label>
-        <input matInput formControlName="description" placeholder="Optional description">
+        <input matInput formControlName="description" placeholder="Optional note">
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
@@ -29,12 +44,13 @@
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Date</mat-label>
         <input matInput [matDatepicker]="picker" formControlName="expenseDate">
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker-toggle matSuffix [for]="picker">
+        </mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
 
-      <button mat-raised-button color="primary" type="submit" class="full-width">
-        {{ expenseToEdit ? 'Update' : 'Add Expense' }}
+      <button mat-raised-button [color]="isIncome ? 'accent' : 'primary'" type="submit" class="full-width">
+        {{ expenseToEdit ? 'Update' : (isIncome ? 'Add Income' : 'Add Expense') }}
       </button>
     </form>
   </mat-card-content>

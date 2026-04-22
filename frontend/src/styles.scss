@@ -12,7 +12,142 @@ body {
 a {
   color: #3f51b5;
   text-decoration: none;
+
   &:hover {
     text-decoration: underline;
+  }
+}
+
+.error-snackbar {
+  background: #c62828 !important;
+  color: white !important;
+
+  .mat-button {
+    color: white !important;
+  }
+}
+
+.success-snackbar {
+  background: #2e7d32 !important;
+  color: white !important;
+
+  .mat-button {
+    color: white !important;
+  }
+}
+
+// Dark Theme
+.dark-theme {
+  background: #121212 !important;
+  color: #e0e0e0 !important;
+
+  // Cards
+  mat-card,
+  .mat-card {
+    background: #1e1e1e !important;
+    color: #e0e0e0 !important;
+  }
+
+  // Toolbar
+  mat-toolbar {
+    background: #1a237e !important;
+  }
+
+  // Tables
+  .mat-table {
+    background: #1e1e1e !important;
+    color: #e0e0e0 !important;
+  }
+
+  .mat-header-cell {
+    color: #b0b0b0 !important;
+    background: #1e1e1e !important;
+  }
+
+  .mat-cell {
+    color: #e0e0e0 !important;
+    border-bottom-color: #333 !important;
+  }
+
+  .mat-row:hover {
+    background: #2a2a2a !important;
+  }
+
+  // Form fields
+  .mat-form-field-appearance-outline .mat-form-field-outline {
+    color: #555 !important;
+  }
+
+  .mat-input-element {
+    color: #e0e0e0 !important;
+  }
+
+  .mat-form-field-label {
+    color: #aaa !important;
+  }
+
+  .mat-select-value {
+    color: #e0e0e0 !important;
+  }
+
+  .mat-select-panel {
+    background: #1e1e1e !important;
+  }
+
+  .mat-option {
+    color: #e0e0e0 !important;
+
+    &:hover {
+      background: #2a2a2a !important;
+    }
+  }
+
+  // Stat values
+  .stat-value,
+  .kpi-value {
+    color: #7986cb !important;
+  }
+
+  // Budget cards
+  .budget-card {
+    background: #1e1e1e !important;
+  }
+
+  // Misc
+  .summary-bar {
+    color: #aaa !important;
+  }
+
+  .stat-label,
+  .kpi-label {
+    color: #aaa !important;
+  }
+
+  .category-name {
+    color: #e0e0e0 !important;
+  }
+
+  h2,
+  h3 {
+    color: #e0e0e0 !important;
+  }
+
+  p {
+    color: #bbb !important;
+  }
+
+  // Auth pages
+  .auth-container {
+    background: #121212 !important;
+  }
+
+  .auth-card {
+    background: #1e1e1e !important;
+  }
+
+  // Snackbar
+  .mat-snack-bar-container {
+    background: #333 !important;
+    color: #fff !important;
   }
 }

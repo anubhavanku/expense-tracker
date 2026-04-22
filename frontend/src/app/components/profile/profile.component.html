@@ -69,20 +69,18 @@
               <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
                 <mat-form-field appearance="outline" class="full-width">
                   <mat-label>Current Password</mat-label>
-                  <mat-icon matPrefix>lock</mat-icon>
-                  <input matInput formControlName="currentPassword" type="password">
+                  <input matInput formControlName="currentPassword" type="password"
+                    placeholder="Enter current password">
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="full-width">
                   <mat-label>New Password</mat-label>
-                  <mat-icon matPrefix>lock_open</mat-icon>
-                  <input matInput formControlName="newPassword" type="password">
+                  <input matInput formControlName="newPassword" type="password" placeholder="Min 6 characters">
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="full-width">
                   <mat-label>Confirm New Password</mat-label>
-                  <mat-icon matPrefix>lock_open</mat-icon>
-                  <input matInput formControlName="confirmPassword" type="password">
+                  <input matInput formControlName="confirmPassword" type="password" placeholder="Re-enter new password">
                 </mat-form-field>
 
                 <button mat-raised-button color="primary" type="submit" [disabled]="passwordForm.invalid">

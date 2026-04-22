@@ -17,7 +17,13 @@
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Password</mat-label>
-          <input matInput formControlName="password" type="password" placeholder="Min 6 characters">
+          <input matInput formControlName="password" [type]="showPassword ? 'text' : 'password'"
+            placeholder="Min 6 characters">
+          <button mat-icon-button matSuffix type="button" (click)="showPassword = !showPassword">
+            <mat-icon>
+              {{ showPassword ? 'visibility_off' : 'visibility' }}
+            </mat-icon>
+          </button>
         </mat-form-field>
 
         <button mat-raised-button color="primary" type="submit" class="full-width">Register</button>

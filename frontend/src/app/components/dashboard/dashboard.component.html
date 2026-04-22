@@ -7,23 +7,51 @@
       <mat-card-content>
         <div class="stat-icon" style="background:#e8eaf6">💰</div>
         <div class="stat-label">Total Spent</div>
-        <div class="stat-value">₹{{ totalExpenses | number:'1.2-2' }}</div>
+        <div class="stat-value expense-val">
+          ₹{{ totalExpenses | number:'1.2-2' }}</div>
+        <div class="stat-scope">All time</div>
       </mat-card-content>
     </mat-card>
 
     <mat-card class="stat-card">
       <mat-card-content>
-        <div class="stat-icon" style="background:#e8f5e9">🧾</div>
-        <div class="stat-label">Transactions</div>
-        <div class="stat-value">{{ expenseCount }}</div>
+        <div class="stat-icon" style="background:#e8f5e9">📈</div>
+        <div class="stat-label">Total Income</div>
+        <div class="stat-value income-val">
+          ₹{{ totalIncome | number:'1.2-2' }}</div>
+        <div class="stat-scope">All time</div>
       </mat-card-content>
     </mat-card>
 
     <mat-card class="stat-card">
       <mat-card-content>
-        <div class="stat-icon" style="background:#fce4ec">📊</div>
+        <div class="stat-icon" [style.background]="netSavings >= 0 ? '#e8f5e9' : '#fce4ec'">
+          {{ netSavings >= 0 ? '🟢' : '🔴' }}
+        </div>
+        <div class="stat-label">Net Savings</div>
+        <div class="stat-value" [ngClass]="netSavings >= 0 ? 'income-val' : 'expense-val'">
+          ₹{{ netSavings | number:'1.2-2' }}
+        </div>
+        <div class="stat-scope">All time</div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-icon" style="background:#e0f2f1">💳</div>
+        <div class="stat-label">Spent This Month</div>
+        <div class="stat-value expense-val">
+          ₹{{ currentMonthSpent | number:'1.2-2' }}</div>
+        <div class="stat-scope">{{ currentMonth }}/{{ currentYear }}</div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-icon" style="background:#fff3e0">📊</div>
         <div class="stat-label">Top Category</div>
         <div class="stat-value small">{{ highestCategory }}</div>
+        <div class="stat-scope">All time</div>
       </mat-card-content>
     </mat-card>
   </div>
@@ -43,29 +71,30 @@
       </div>
 
       <div class="budget-amounts">
-        <span>Spent: <strong>₹{{ totalExpenses | number:'1.2-2' }}</strong></span>
+        <span>Spent this month: <strong>
+            ₹{{ currentMonthSpent | number:'1.2-2' }}</strong>
+        </span>
         <span>Limit: <strong>₹{{ budgetLimit | number:'1.2-2' }}</strong></span>
         <span>Remaining: <strong [ngClass]="budgetStatus">
-          ₹{{ (budgetLimit - totalExpenses) | number:'1.2-2' }}
-        </strong></span>
+            ₹{{ (budgetLimit - currentMonthSpent) | number:'1.2-2' }}
+          </strong></span>
       </div>
 
-      <mat-progress-bar
-        [value]="budgetUsedPercent"
+      <mat-progress-bar [value]="budgetUsedPercent"
         [color]="budgetStatus === 'danger' ? 'warn' : budgetStatus === 'warning' ? 'accent' : 'primary'">
       </mat-progress-bar>
 
       <div class="budget-percent">{{ budgetUsedPercent | number:'1.0-0' }}% used</div>
 
-    <div class="budget-message danger-msg" *ngIf="budgetStatus === 'danger'">
+      <div class="budget-message danger-msg" *ngIf="budgetStatus === 'danger'">
         🚨 You've used over 90% of your monthly budget!
-    </div>
-    <div class="budget-message warning-msg" *ngIf="budgetStatus === 'warning'">
+      </div>
+      <div class="budget-message warning-msg" *ngIf="budgetStatus === 'warning'">
         🔔 You've used over 70% of your monthly budget.
-    </div>
-    <div class="budget-message safe-msg" *ngIf="budgetStatus === 'safe'">
+      </div>
+      <div class="budget-message safe-msg" *ngIf="budgetStatus === 'safe'">
         ✅ You're within your monthly budget.
-    </div>
+      </div>
     </mat-card-content>
   </mat-card>
 
@@ -76,11 +105,10 @@
         <mat-card-title>Spending by Category</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <canvas baseChart
-          [data]="pieChartData"
-          [type]="pieChartType"
-          [options]="pieChartOptions">
-        </canvas>
+        <div class="chart-wrapper">
+          <canvas baseChart [data]="pieChartData" [type]="pieChartType" [options]="pieChartOptions">
+          </canvas>
+        </div>
       </mat-card-content>
     </mat-card>
 
@@ -89,27 +117,38 @@
         <mat-card-title>Monthly Spending</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <canvas baseChart
-          [data]="monthlyChartData"
-          [type]="barChartType"
-          [options]="monthlyChartOptions">
-        </canvas>
+        <div class="chart-wrapper">
+          <canvas baseChart [data]="monthlyChartData" [type]="barChartType" [options]="monthlyChartOptions">
+          </canvas>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="chart-card">
+      <mat-card-header>
+        <mat-card-title>Income vs Expenses</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="chart-wrapper">
+          <canvas baseChart [data]="incomeExpenseData" [type]="incomeExpenseType" [options]="incomeExpenseOptions">
+          </canvas>
+        </div>
       </mat-card-content>
     </mat-card>
   </div>
 
   <!-- Daily Spending Chart (full width) -->
-<mat-card class="chart-card full-width-chart">
+  <mat-card class="chart-card full-width-chart">
     <mat-card-header>
-        <mat-card-title>Daily Spending — Last 30 Days</mat-card-title>
+      <mat-card-title>Daily Spending — Last 30 Days</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-        <div class="chart-wrapper">
-            <canvas baseChart [data]="dailyChartData" [type]="dailyChartType" [options]="dailyChartOptions">
-            </canvas>
-        </div>
+      <div class="chart-wrapper">
+        <canvas baseChart [data]="dailyChartData" [type]="dailyChartType" [options]="dailyChartOptions">
+        </canvas>
+      </div>
     </mat-card-content>
-</mat-card>
+  </mat-card>
 
   <!-- Recent Expenses -->
   <mat-card class="recent-card">

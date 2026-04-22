@@ -23,6 +23,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -35,6 +36,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { AnalyticsComponent } from './components/analytics/analytics.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { ErrorInterceptor } from './interceptors/error.interceptor';
+import { BudgetComponent } from './components/budget/budget.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +50,8 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
     NavbarComponent,
     ProfileComponent,
     AnalyticsComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    BudgetComponent
   ],
   imports: [
     BrowserModule,
@@ -72,12 +76,18 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
     MatChipsModule,
     MatProgressBarModule,
     MatDividerModule,
-    MatTabsModule
+    MatTabsModule,
+    MatTooltipModule
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptor,
       multi: true
     }
   ],

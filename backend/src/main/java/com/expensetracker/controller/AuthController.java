@@ -12,7 +12,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
+@Tag(name = "Authentication", description = "Register and login endpoints")
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -22,6 +25,7 @@ public class AuthController {
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
 
+    @Operation(summary = "Register a new user")
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(
             @RequestBody Map<String, String> request) {
@@ -37,11 +41,12 @@ public class AuthController {
         );
     }
 
+    @Operation(summary = "Login and get JWT token")
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(
             @RequestBody AuthRequest request) {
         try {
-            User user = userService.findByEmail(request.getEmail());
+            User user = userService.findByEmailOrUsername(request.getEmail());
             if (!passwordEncoder.matches(
                     request.getPassword(), user.getPassword())) {
                 return ResponseEntity.status(401).build();

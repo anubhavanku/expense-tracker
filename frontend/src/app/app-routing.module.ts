@@ -7,20 +7,32 @@ import { ExpenseListComponent } from './components/expense-list/expense-list.com
 import { ProfileComponent } from './components/profile/profile.component';
 import { AnalyticsComponent } from './components/analytics/analytics.component';
 import { AuthGuard } from './guards/auth.guard';
+import { BudgetComponent } from './components/budget/budget.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'dashboard', component: DashboardComponent,
-    canActivate: [AuthGuard] },
-  { path: 'expenses', component: ExpenseListComponent,
-    canActivate: [AuthGuard] },
-  { path: 'analytics', component: AnalyticsComponent,
-    canActivate: [AuthGuard] },
-  { path: 'profile', component: ProfileComponent,
-    canActivate: [AuthGuard] },
-  { path: '**', redirectTo: '/login' }
+  {
+    path: 'dashboard', component: DashboardComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'expenses', component: ExpenseListComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'analytics', component: AnalyticsComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'profile', component: ProfileComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'budget', component: BudgetComponent,
+    canActivate: [AuthGuard]
+  }
 ];
 
 @NgModule({

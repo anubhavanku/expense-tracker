@@ -10,6 +10,7 @@ export interface Expense {
   category: string;
   expenseDate: string;
   userId: number;
+  type: 'INCOME' | 'EXPENSE';
 }
 
 @Injectable({
@@ -18,7 +19,7 @@ export interface Expense {
 export class ExpenseService {
   private apiUrl = 'http://localhost:8080/api/expenses';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   createExpense(expense: Expense): Observable<Expense> {
     return this.http.post<Expense>(this.apiUrl, expense);
@@ -50,5 +51,15 @@ export class ExpenseService {
 
   getSummaryByCategory(userId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/user/${userId}/summary`);
+  }
+
+  getTotalIncome(userId: number): Observable<number> {
+    return this.http.get<number>(
+      `${this.apiUrl}/user/${userId}/income`);
+  }
+
+  getByType(userId: number, type: string): Observable<Expense[]> {
+    return this.http.get<Expense[]>(
+      `${this.apiUrl}/user/${userId}/type/${type}`);
   }
 }

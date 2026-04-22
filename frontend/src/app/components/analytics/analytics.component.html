@@ -1,5 +1,6 @@
 <div class="analytics-container">
   <h2>Analytics</h2>
+  <p class="subtitle">All-time expense breakdown (income excluded)</p>
 
   <!-- KPI Cards -->
   <div class="kpi-row">
@@ -24,7 +25,9 @@
     <mat-card class="kpi-card">
       <div class="kpi-icon" style="background:#fff3e0">🏆</div>
       <div class="kpi-label">Highest Expense</div>
-      <div class="kpi-value">₹{{ highestExpense?.amount | number:'1.2-2' }}</div>
+      <div class="kpi-value">
+        ₹{{ highestExpense?.amount | number:'1.2-2' }}
+      </div>
       <div class="kpi-sub">{{ highestExpense?.title }}</div>
     </mat-card>
 
@@ -35,31 +38,31 @@
     </mat-card>
   </div>
 
-  <!-- Charts Row 1 -->
+  <!-- Category Charts Row -->
   <div class="charts-row">
     <mat-card class="chart-card">
       <mat-card-header>
         <mat-card-title>Spending by Category</mat-card-title>
+        <mat-card-subtitle>All-time, sorted highest to lowest</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
-        <canvas baseChart
-          [data]="categoryBarData"
-          [type]="categoryBarType"
-          [options]="categoryBarOptions">
-        </canvas>
+        <div class="chart-wrapper">
+          <canvas baseChart [data]="categoryBarData" [type]="categoryBarType" [options]="categoryBarOptions">
+          </canvas>
+        </div>
       </mat-card-content>
     </mat-card>
 
     <mat-card class="chart-card">
       <mat-card-header>
         <mat-card-title>Category Distribution</mat-card-title>
+        <mat-card-subtitle>Percentage of total spending</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
-        <canvas baseChart
-          [data]="doughnutData"
-          [type]="doughnutType"
-          [options]="doughnutOptions">
-        </canvas>
+        <div class="chart-wrapper">
+          <canvas baseChart [data]="doughnutData" [type]="doughnutType" [options]="doughnutOptions">
+          </canvas>
+        </div>
       </mat-card-content>
     </mat-card>
   </div>
@@ -68,13 +71,13 @@
   <mat-card class="chart-card trend-card">
     <mat-card-header>
       <mat-card-title>Monthly Spending Trend</mat-card-title>
+      <mat-card-subtitle>
+        Expenses only — income excluded
+      </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
       <div class="trend-wrapper">
-        <canvas baseChart
-          [data]="trendData"
-          [type]="trendType"
-          [options]="trendOptions">
+        <canvas baseChart [data]="trendData" [type]="trendType" [options]="trendOptions">
         </canvas>
       </div>
     </mat-card-content>

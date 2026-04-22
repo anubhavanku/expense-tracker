@@ -1,21 +1,36 @@
 <div class="auth-container">
   <mat-card class="auth-card">
     <mat-card-header>
-      <mat-card-title>Login</mat-card-title>
+      <mat-card-title>Welcome Back 👋</mat-card-title>
+      <mat-card-subtitle>Login to your account</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Email</mat-label>
-          <input matInput formControlName="email" type="email" placeholder="Enter your email">
+          <mat-label>Email or Username</mat-label>
+          <input matInput formControlName="email" placeholder="Enter email or username">
+          <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
+            This field is required
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Password</mat-label>
-          <input matInput formControlName="password" type="password" placeholder="Enter your password">
+          <input matInput formControlName="password" [type]="showPassword ? 'text' : 'password'"
+            placeholder="Enter your password">
+          <button mat-icon-button matSuffix type="button" (click)="showPassword = !showPassword">
+            <mat-icon>
+              {{ showPassword ? 'visibility_off' : 'visibility' }}
+            </mat-icon>
+          </button>
+          <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+            Password is required
+          </mat-error>
         </mat-form-field>
 
-        <button mat-raised-button color="primary" type="submit" class="full-width">Login</button>
+        <button mat-raised-button color="primary" type="submit" class="full-width" [disabled]="loginForm.invalid">
+          Login
+        </button>
       </form>
     </mat-card-content>
     <mat-card-actions>

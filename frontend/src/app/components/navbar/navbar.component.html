@@ -1,11 +1,15 @@
 <mat-toolbar color="primary">
-  <span>💰 Expense Tracker</span>
+  <span class="brand">💰 Expense Tracker</span>
   <span class="spacer"></span>
   <ng-container *ngIf="authService.isLoggedIn()">
     <button mat-button routerLink="/dashboard" routerLinkActive="active-link">Dashboard</button>
     <button mat-button routerLink="/expenses" routerLinkActive="active-link">Expenses</button>
+    <button mat-button routerLink="/budget" routerLinkActive="active-link">Budget</button>
     <button mat-button routerLink="/analytics" routerLinkActive="active-link">Analytics</button>
     <button mat-button routerLink="/profile" routerLinkActive="active-link">Profile</button>
+    <button mat-icon-button (click)="toggleDark.emit()" [matTooltip]="isDarkMode ? 'Light Mode' : 'Dark Mode'">
+      <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
+    </button>
     <button mat-button (click)="logout()">Logout</button>
   </ng-container>
   <ng-container *ngIf="!authService.isLoggedIn()">

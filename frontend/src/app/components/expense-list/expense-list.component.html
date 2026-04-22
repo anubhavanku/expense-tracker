@@ -6,10 +6,7 @@
     </button>
   </div>
 
-  <app-expense-form
-    *ngIf="showForm"
-    [expenseToEdit]="selectedExpense"
-    (expenseSaved)="onExpenseSaved()">
+  <app-expense-form *ngIf="showForm" [expenseToEdit]="selectedExpense" (expenseSaved)="onExpenseSaved()">
   </app-expense-form>
 
   <!-- Filters -->
@@ -45,8 +42,23 @@
 
   <!-- Summary -->
   <div class="summary-bar">
-    <span>Showing <strong>{{ expenses.length }}</strong> expenses</span>
-    <span>Total: <strong>₹{{ getTotalAmount() | number:'1.2-2' }}</strong></span>
+    <span>Showing <strong>{{ expenses.length }}</strong> transactions</span>
+    <div class="summary-totals">
+      <span class="income-total">
+        📥 Income: <strong>₹{{ getTotalIncome() | number:'1.2-2' }}</strong>
+      </span>
+      <span class="divider">|</span>
+      <span class="expense-total">
+        📤 Expenses: <strong>₹{{ getTotalExpenses() | number:'1.2-2' }}</strong>
+      </span>
+      <span class="divider">|</span>
+      <span class="net-total" [ngClass]="(getTotalIncome() - getTotalExpenses()) >= 0
+        ? 'positive' : 'negative'">
+        💰 Net: <strong>
+          ₹{{ (getTotalIncome() - getTotalExpenses()) | number:'1.2-2' }}
+        </strong>
+      </span>
+    </div>
   </div>
 
   <!-- Table -->
@@ -59,6 +71,15 @@
     <ng-container matColumnDef="title">
       <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
       <mat-cell *matCellDef="let e">{{ e.title }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="type">
+      <mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
+      <mat-cell *matCellDef="let e">
+        <span class="type-badge" [ngClass]="e.type === 'INCOME' ? 'income-badge' : 'expense-badge'">
+          {{ e.type === 'INCOME' ? '📥 Income' : '📤 Expense' }}
+        </span>
+      </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="category">
