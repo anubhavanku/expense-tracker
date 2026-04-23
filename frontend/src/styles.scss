@@ -881,6 +881,44 @@ a {
       color: #7986cb !important;
     }
   }
+
+  // ---- Insights Page ----
+  .insights-container {
+    .subtitle { color: #888 !important; }
+  }
+  .insight-card {
+    background: #1e1e1e !important;
+    &.positive { border-left-color: #4caf50 !important; }
+    &.negative { border-left-color: #ef5350 !important; }
+    &.warning { border-left-color: #ffa726 !important; }
+    &.neutral { border-left-color: #42a5f5 !important; }
+  }
+  .insight-icon-wrapper {
+    &.positive { background: #1b5e20 !important; }
+    &.negative { background: #7f0000 !important; }
+    &.warning { background: #e65100 !important; }
+    &.neutral { background: #0d47a1 !important; }
+  }
+  .insight-title { color: #e0e0e0 !important; }
+  .insight-message { color: #aaa !important; }
+  .insight-value {
+    &.positive { color: #66bb6a !important; }
+    &.negative { color: #ef5350 !important; }
+    &.warning { color: #ffa726 !important; }
+    &.neutral { color: #42a5f5 !important; }
+  }
+  .insight-badge {
+    &.positive { color: #66bb6a !important; }
+    &.negative { color: #ef5350 !important; }
+    &.warning { color: #ffa726 !important; }
+    &.neutral { color: #42a5f5 !important; }
+  }
+  .skeleton-card {
+    background: linear-gradient(
+      90deg, #2a2a2a 25%, #333 50%, #2a2a2a 75%
+    ) !important;
+    background-size: 200% 100% !important;
+  }
 }
 
 

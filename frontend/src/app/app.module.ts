@@ -40,6 +40,7 @@ import { AnalyticsComponent } from './components/analytics/analytics.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { BudgetComponent } from './components/budget/budget.component';
+import { InsightsComponent } from './components/insights/insights.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { BudgetComponent } from './components/budget/budget.component';
     ProfileComponent,
     AnalyticsComponent,
     ConfirmDialogComponent,
-    BudgetComponent
+    BudgetComponent,
+    InsightsComponent
   ],
   imports: [
     BrowserModule,

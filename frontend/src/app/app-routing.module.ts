@@ -8,6 +8,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { AnalyticsComponent } from './components/analytics/analytics.component';
 import { AuthGuard } from './guards/auth.guard';
 import { BudgetComponent } from './components/budget/budget.component';
+import { InsightsComponent } from './components/insights/insights.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -32,7 +33,11 @@ const routes: Routes = [
   {
     path: 'budget', component: BudgetComponent,
     canActivate: [AuthGuard]
-  }
+  },
+  {
+    path: 'insights', component: InsightsComponent,
+    canActivate: [AuthGuard]
+  },
 ];
 
 @NgModule({

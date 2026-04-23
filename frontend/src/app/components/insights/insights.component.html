@@ -1,0 +1,55 @@
+<div class="insights-container">
+    <div class="insights-header">
+        <div>
+            <h2>💡 Smart Insights</h2>
+            <p class="subtitle">Automated analysis of your spending patterns</p>
+        </div>
+        <button mat-raised-button color="primary" (click)="generateInsights()">
+            <mat-icon>refresh</mat-icon> Refresh
+        </button>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-state" *ngIf="isLoading">
+        <div class="skeleton-card" *ngFor="let i of [1,2,3,4,5,6]"></div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="!isLoading && insights.length === 0">
+        <mat-icon>lightbulb_outline</mat-icon>
+        <p>Not enough data yet. Add more transactions to see insights!</p>
+    </div>
+
+    <!-- Insights Grid -->
+    <div class="insights-grid" *ngIf="!isLoading && insights.length > 0">
+        <mat-card class="insight-card" *ngFor="let insight of insights" [ngClass]="insight.type">
+
+            <mat-card-content>
+                <div class="insight-top">
+                    <div class="insight-icon-wrapper" [ngClass]="insight.type">
+                        <span class="insight-emoji">{{ insight.icon }}</span>
+                    </div>
+                    <div class="insight-value" *ngIf="insight.value" [ngClass]="insight.type">
+                        {{ insight.value }}
+                    </div>
+                </div>
+
+                <div class="insight-title">{{ insight.title }}</div>
+                <div class="insight-message">{{ insight.message }}</div>
+
+                <div class="insight-badge" [ngClass]="insight.type">
+                    <mat-icon class="badge-icon">
+                        {{ insight.type === 'positive' ? 'check_circle' :
+                        insight.type === 'negative' ? 'error' :
+                        insight.type === 'warning' ? 'warning' : 'info' }}
+                    </mat-icon>
+                    <span>
+                        {{ insight.type === 'positive' ? 'Good news' :
+                        insight.type === 'negative' ? 'Action needed' :
+                        insight.type === 'warning' ? 'Watch out' : 'Info' }}
+                    </span>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
