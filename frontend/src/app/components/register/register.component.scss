@@ -5,11 +5,27 @@
   height: calc(100vh - 64px);
   background: #f5f5f5;
 }
+
 .auth-card {
   width: 400px;
   padding: 20px;
 }
+
 .full-width {
   width: 100%;
   margin-bottom: 16px;
+}
+
+//MOBILE VIEW
+@media (max-width: 768px) {
+  .auth-container {
+    padding: 16px;
+    align-items: flex-start;
+    padding-top: 40px;
+  }
+
+  .auth-card {
+    width: 100%;
+    padding: 16px;
+  }
 }

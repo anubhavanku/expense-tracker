@@ -1,5 +1,72 @@
+mat-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 0 8px !important;
+}
+
+.brand-text {
+  font-size: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+
+  @media (max-width: 480px) {
+    font-size: 13px;
+  }
+}
+
 .spacer { flex: 1 1 auto; }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar { display: none; }
+  flex-shrink: 0;
+}
+
+.nav-text {
+  margin-left: 4px;
+}
+
 .active-link {
-  background: rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.15) !important;
   border-radius: 4px;
+}
+
+// Desktop — show icons + text
+@media (min-width: 769px) {
+  .nav-links button {
+    font-size: 14px;
+  }
+}
+
+// Mobile — icons only, smaller padding
+@media (max-width: 768px) {
+  mat-toolbar {
+    padding: 0 4px !important;
+  }
+
+  .nav-text {
+    display: none;
+  }
+
+  .nav-links {
+    button.mat-mdc-button,
+    button.mat-mdc-icon-button {
+      min-width: unset !important;
+      padding: 0 4px !important;
+      width: 36px !important;
+      height: 36px !important;
+
+      mat-icon {
+        font-size: 20px !important;
+        width: 20px !important;
+        height: 20px !important;
+      }
+    }
+  }
 }

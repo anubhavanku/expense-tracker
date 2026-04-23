@@ -109,3 +109,31 @@
     }
   }
 }
+
+//MOBILE VIEW
+@media (max-width: 768px) {
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .kpi-card {
+    min-width: unset;
+    padding: 12px 8px;
+  }
+
+  .kpi-value {
+    font-size: 16px !important;
+  }
+
+  .charts-row {
+    flex-direction: column;
+  }
+
+  .chart-card {
+    .chart-wrapper {
+      height: 220px;
+    }
+  }
+}

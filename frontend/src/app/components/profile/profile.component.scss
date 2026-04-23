@@ -100,3 +100,22 @@
   color: #555;
   vertical-align: middle;
 }
+
+//MOBILE VIEW
+@media (max-width: 768px) {
+  .profile-layout {
+    flex-direction: column;
+  }
+
+  .profile-sidebar {
+    width: 100%;
+  }
+
+  .avatar-card {
+    padding: 16px;
+  }
+
+  .profile-main {
+    width: 100%;
+  }
+}

@@ -1,3 +1,7 @@
+// Mobile breakpoints
+$mobile: 768px;
+$tablet: 1024px;
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -650,16 +654,55 @@ a {
 
   // ---- Category chips in dark mode ----
   .category-chip {
-    &.food { background: #1b5e20 !important; color: #a5d6a7 !important; }
-    &.transport { background: #0d47a1 !important; color: #90caf9 !important; }
-    &.entertainment { background: #880e4f !important; color: #f48fb1 !important; }
-    &.shopping { background: #e65100 !important; color: #ffcc80 !important; }
-    &.health { background: #4a148c !important; color: #ce93d8 !important; }
-    &.bills { background: #004d40 !important; color: #80cbc4 !important; }
-    &.salary { background: #1b5e20 !important; color: #a5d6a7 !important; }
-    &.investment { background: #1a237e !important; color: #9fa8da !important; }
-    &.freelance { background: #f57f17 !important; color: #fff9c4 !important; }
-    &.other { background: #333 !important; color: #bbb !important; }
+    &.food {
+      background: #1b5e20 !important;
+      color: #a5d6a7 !important;
+    }
+
+    &.transport {
+      background: #0d47a1 !important;
+      color: #90caf9 !important;
+    }
+
+    &.entertainment {
+      background: #880e4f !important;
+      color: #f48fb1 !important;
+    }
+
+    &.shopping {
+      background: #e65100 !important;
+      color: #ffcc80 !important;
+    }
+
+    &.health {
+      background: #4a148c !important;
+      color: #ce93d8 !important;
+    }
+
+    &.bills {
+      background: #004d40 !important;
+      color: #80cbc4 !important;
+    }
+
+    &.salary {
+      background: #1b5e20 !important;
+      color: #a5d6a7 !important;
+    }
+
+    &.investment {
+      background: #1a237e !important;
+      color: #9fa8da !important;
+    }
+
+    &.freelance {
+      background: #f57f17 !important;
+      color: #fff9c4 !important;
+    }
+
+    &.other {
+      background: #333 !important;
+      color: #bbb !important;
+    }
   }
 
   // ---- Type badges in dark mode ----
@@ -668,6 +711,7 @@ a {
       background: #1b5e20 !important;
       color: #a5d6a7 !important;
     }
+
     &.expense-badge {
       background: #7f0000 !important;
       color: #ef9a9a !important;
@@ -678,25 +722,31 @@ a {
   .mat-mdc-paginator {
     .mat-mdc-icon-button {
       color: #e0e0e0 !important;
+
       &:disabled {
         color: #555 !important;
         opacity: 0.5;
       }
-      mat-icon, .mat-icon {
+
+      mat-icon,
+      .mat-icon {
         color: #e0e0e0 !important;
       }
     }
+
     .mat-mdc-paginator-range-label {
       color: #bbb !important;
     }
+
     .mat-mdc-paginator-page-size-label {
       color: #bbb !important;
     }
+
     .mat-mdc-select-value {
       color: #e0e0e0 !important;
     }
   }
-  
+
   // ---- Paginator arrows — stronger override ----
   .mat-mdc-paginator {
     background: #1e1e1e !important;
@@ -705,17 +755,32 @@ a {
     // Active arrows
     button.mat-mdc-icon-button:not([disabled]) {
       color: #e0e0e0 !important;
-      mat-icon { color: #e0e0e0 !important; }
-      svg { fill: #e0e0e0 !important; }
-      .mat-mdc-button-touch-target { opacity: 1 !important; }
+
+      mat-icon {
+        color: #e0e0e0 !important;
+      }
+
+      svg {
+        fill: #e0e0e0 !important;
+      }
+
+      .mat-mdc-button-touch-target {
+        opacity: 1 !important;
+      }
     }
 
     // Disabled arrows
     button.mat-mdc-icon-button[disabled] {
       color: #444 !important;
       opacity: 1 !important;
-      mat-icon { color: #444 !important; }
-      svg { fill: #444 !important; }
+
+      mat-icon {
+        color: #444 !important;
+      }
+
+      svg {
+        fill: #444 !important;
+      }
     }
 
     // Page size text
@@ -741,18 +806,24 @@ a {
     scrollbar-width: thin;
     scrollbar-color: #555 #2a2a2a;
   }
+
   *::-webkit-scrollbar {
     width: 6px;
     height: 6px;
   }
+
   *::-webkit-scrollbar-track {
     background: #2a2a2a;
     border-radius: 3px;
   }
+
   *::-webkit-scrollbar-thumb {
     background: #555;
     border-radius: 3px;
-    &:hover { background: #777; }
+
+    &:hover {
+      background: #777;
+    }
   }
 
   // ---- Dropdown panel scrollbar ----
@@ -760,11 +831,84 @@ a {
   .mat-select-panel {
     background: #2a2a2a !important;
     scrollbar-color: #555 #2a2a2a !important;
+
     &::-webkit-scrollbar-track {
       background: #2a2a2a !important;
     }
+
     &::-webkit-scrollbar-thumb {
       background: #555 !important;
     }
+  }
+
+  // ---- Validation states in dark mode ----
+  .mat-mdc-form-field.mat-form-field-invalid {
+
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: #ef5350 !important;
+    }
+
+    .mat-mdc-floating-label,
+    .mdc-floating-label {
+      color: #ef5350 !important;
+    }
+  }
+
+  // Required field asterisk
+  .mat-mdc-form-field .mat-mdc-form-field-required-marker {
+    color: #ef5350 !important;
+  }
+
+  // Error messages
+  .mat-mdc-form-field-error,
+  .mat-error {
+    color: #ef5350 !important;
+  }
+
+  // Focused outline
+  .mat-mdc-form-field.mat-focused {
+
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: #7986cb !important;
+    }
+
+    .mat-mdc-floating-label,
+    .mdc-floating-label {
+      color: #7986cb !important;
+    }
+  }
+}
+
+
+
+// ============================================
+// RESPONSIVE — Mobile First
+// ============================================
+
+// Prevent horizontal scroll
+* {
+  box-sizing: border-box;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+// Responsive containers
+.dashboard-container,
+.expense-container,
+.budget-container,
+.analytics-container,
+.profile-container {
+  padding: 16px !important;
+  max-width: 100% !important;
+
+  @media (min-width: 768px) {
+    padding: 24px !important;
+    max-width: 1100px !important;
   }
 }
