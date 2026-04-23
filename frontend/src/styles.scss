@@ -36,118 +36,735 @@ a {
   }
 }
 
-// Dark Theme
+// ============================================
+// DARK THEME — Complete Override
+// ============================================
 .dark-theme {
   background: #121212 !important;
   color: #e0e0e0 !important;
 
-  // Cards
-  mat-card,
-  .mat-card {
-    background: #1e1e1e !important;
+  // ---- Typography ----
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     color: #e0e0e0 !important;
   }
 
-  // Toolbar
-  mat-toolbar {
-    background: #1a237e !important;
+  p,
+  span,
+  label,
+  div {
+    color: #e0e0e0 !important;
   }
 
-  // Tables
+  // ---- Cards ----
+  mat-card,
+  .mat-card,
+  .mat-mdc-card {
+    background: #1e1e1e !important;
+    color: #e0e0e0 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  // ---- Toolbar ----
+  mat-toolbar,
+  .mat-toolbar {
+    background: #1a237e !important;
+    color: #ffffff !important;
+  }
+
+  // ---- Form Fields ----
+  .mat-mdc-form-field,
+  .mat-form-field {
+
+    .mat-mdc-text-field-wrapper,
+    .mat-form-field-wrapper {
+      background: #2a2a2a !important;
+    }
+
+    .mdc-text-field--outlined:not(.mdc-text-field--disabled) {
+
+      .mdc-notched-outline__leading,
+      .mdc-notched-outline__notch,
+      .mdc-notched-outline__trailing {
+        border-color: #555 !important;
+      }
+    }
+
+    .mdc-text-field--outlined:not(.mdc-text-field--disabled):hover {
+
+      .mdc-notched-outline__leading,
+      .mdc-notched-outline__notch,
+      .mdc-notched-outline__trailing {
+        border-color: #7986cb !important;
+      }
+    }
+
+    .mat-mdc-form-field-hint,
+    .mat-mdc-floating-label,
+    .mat-form-field-label {
+      color: #aaa !important;
+    }
+
+    .mat-mdc-input-element,
+    .mat-input-element,
+    input,
+    textarea {
+      color: #e0e0e0 !important;
+      caret-color: #7986cb !important;
+    }
+
+    .mat-mdc-select-value,
+    .mat-select-value {
+      color: #e0e0e0 !important;
+    }
+
+    .mat-mdc-select-arrow,
+    .mat-select-arrow {
+      color: #aaa !important;
+    }
+
+    // Outline form field background
+    .mdc-text-field {
+      background: #2a2a2a !important;
+      border-radius: 4px !important;
+    }
+  }
+
+  // ---- Select Panel ----
+  .mat-mdc-select-panel,
+  .mat-select-panel {
+    background: #2a2a2a !important;
+  }
+
+  .mat-mdc-option,
+  .mat-option {
+    color: #e0e0e0 !important;
+    background: #2a2a2a !important;
+
+    &:hover,
+    &.mat-mdc-option-active {
+      background: #3a3a3a !important;
+    }
+
+    &.mdc-list-item--selected {
+      background: #3f51b5 !important;
+      color: #fff !important;
+    }
+  }
+
+  // ---- Tables ----
+  .mat-mdc-table,
   .mat-table {
     background: #1e1e1e !important;
     color: #e0e0e0 !important;
   }
 
-  .mat-header-cell {
-    color: #b0b0b0 !important;
-    background: #1e1e1e !important;
+  .mat-mdc-header-row,
+  .mat-header-row {
+    background: #252525 !important;
   }
 
+  .mat-mdc-header-cell,
+  .mat-header-cell {
+    color: #bbb !important;
+    border-bottom-color: #444 !important;
+    background: #252525 !important;
+  }
+
+  .mat-mdc-cell,
   .mat-cell {
     color: #e0e0e0 !important;
     border-bottom-color: #333 !important;
   }
 
-  .mat-row:hover {
-    background: #2a2a2a !important;
-  }
-
-  // Form fields
-  .mat-form-field-appearance-outline .mat-form-field-outline {
-    color: #555 !important;
-  }
-
-  .mat-input-element {
-    color: #e0e0e0 !important;
-  }
-
-  .mat-form-field-label {
-    color: #aaa !important;
-  }
-
-  .mat-select-value {
-    color: #e0e0e0 !important;
-  }
-
-  .mat-select-panel {
+  .mat-mdc-row,
+  .mat-row {
     background: #1e1e1e !important;
-  }
-
-  .mat-option {
-    color: #e0e0e0 !important;
 
     &:hover {
       background: #2a2a2a !important;
     }
   }
 
-  // Stat values
-  .stat-value,
-  .kpi-value {
-    color: #7986cb !important;
+  // ---- Paginator ----
+  .mat-mdc-paginator,
+  .mat-paginator {
+    background: #1e1e1e !important;
+    color: #e0e0e0 !important;
+    border-top: 1px solid #333 !important;
+
+    .mat-mdc-paginator-range-label,
+    .mat-paginator-range-label {
+      color: #aaa !important;
+    }
+
+    .mat-mdc-icon-button {
+      color: #aaa !important;
+
+      &:disabled {
+        color: #555 !important;
+      }
+    }
+
+    .mat-mdc-select-value {
+      color: #e0e0e0 !important;
+    }
   }
 
-  // Budget cards
-  .budget-card {
+  // ---- Tabs ----
+  .mat-mdc-tab-group,
+  .mat-tab-group {
+    background: transparent !important;
+  }
+
+  .mat-mdc-tab-header,
+  .mat-tab-header {
+    background: #1e1e1e !important;
+    border-bottom: 1px solid #333 !important;
+  }
+
+  .mat-mdc-tab,
+  .mat-tab-label {
+    color: #aaa !important;
+    opacity: 1 !important;
+
+    &.mdc-tab--active,
+    &.mat-tab-label-active {
+      color: #7986cb !important;
+    }
+  }
+
+  .mat-mdc-tab-body-wrapper {
     background: #1e1e1e !important;
   }
 
-  // Misc
-  .summary-bar {
+  // ---- Dialogs / Modals ----
+  .mat-mdc-dialog-container,
+  .mat-dialog-container {
+    background: #1e1e1e !important;
+    color: #e0e0e0 !important;
+
+    .mat-mdc-dialog-surface {
+      background: #1e1e1e !important;
+    }
+  }
+
+  .mat-mdc-dialog-title,
+  .mat-dialog-title,
+  [mat-dialog-title] {
+    color: #e0e0e0 !important;
+  }
+
+  .mat-mdc-dialog-content,
+  .mat-dialog-content {
+    color: #bbb !important;
+  }
+
+  .mat-mdc-dialog-actions,
+  .mat-dialog-actions {
+    border-top: 1px solid #333 !important;
+    background: #1e1e1e !important;
+  }
+
+  // Overlay backdrop
+  .cdk-overlay-dark-backdrop {
+    background: rgba(0, 0, 0, 0.7) !important;
+  }
+
+  // ---- Buttons ----
+  .mat-mdc-button,
+  .mat-button {
+    color: #7986cb !important;
+  }
+
+  .mat-mdc-stroked-button,
+  .mat-stroked-button {
+    color: #aaa !important;
+    border-color: #555 !important;
+
+    &:hover {
+      background: #2a2a2a !important;
+    }
+  }
+
+  .mat-mdc-icon-button {
+    color: #aaa !important;
+
+    &[color="primary"] {
+      color: #7986cb !important;
+    }
+
+    &[color="warn"] {
+      color: #ef5350 !important;
+    }
+  }
+
+  // Raised buttons keep their colors
+  .mat-mdc-raised-button[color="primary"],
+  .mat-raised-button[color="primary"] {
+    background: #3f51b5 !important;
+    color: #fff !important;
+  }
+
+  .mat-mdc-raised-button[color="warn"],
+  .mat-raised-button[color="warn"] {
+    background: #c62828 !important;
+    color: #fff !important;
+  }
+
+  .mat-mdc-raised-button[color="accent"],
+  .mat-raised-button[color="accent"] {
+    background: #00897b !important;
+    color: #fff !important;
+  }
+
+  // ---- Snackbar ----
+  .mat-mdc-snack-bar-container {
+    background: #2a2a2a !important;
+    color: #fff !important;
+  }
+
+  // ---- Progress Bar ----
+  .mat-mdc-progress-bar,
+  .mat-progress-bar {
+    background: #333 !important;
+  }
+
+  // ---- Divider ----
+  .mat-divider {
+    border-color: #333 !important;
+  }
+
+  // ---- Chips ----
+  .mat-mdc-chip,
+  .mat-chip {
+    background: #333 !important;
+    color: #e0e0e0 !important;
+  }
+
+  // ---- Datepicker ----
+  .mat-datepicker-content {
+    background: #1e1e1e !important;
+    color: #e0e0e0 !important;
+
+    .mat-calendar-body-cell-content {
+      color: #e0e0e0 !important;
+    }
+
+    .mat-calendar-body-selected {
+      background: #3f51b5 !important;
+    }
+
+    .mat-calendar-arrow {
+      fill: #aaa !important;
+    }
+
+    .mat-calendar-table-header,
+    .mat-calendar-body-label {
+      color: #aaa !important;
+    }
+  }
+
+  .mat-datepicker-toggle {
     color: #aaa !important;
   }
 
+  // ---- Sort Header ----
+  .mat-sort-header-arrow {
+    color: #aaa !important;
+  }
+
+  // ============================================
+  // PAGE-SPECIFIC OVERRIDES
+  // ============================================
+
+  // ---- Dashboard ----
   .stat-label,
   .kpi-label {
     color: #aaa !important;
   }
 
-  .category-name {
+  .stat-value,
+  .kpi-value {
+    color: #7986cb !important;
+  }
+
+  .stat-scope {
+    color: #666 !important;
+  }
+
+  .income-val {
+    color: #66bb6a !important;
+  }
+
+  .expense-val {
+    color: #ef5350 !important;
+  }
+
+  // Budget card
+  .budget-card {
+    background: #1e1e1e !important;
+
+    &.warning {
+      border-left-color: #ff9800 !important;
+    }
+
+    &.danger {
+      border-left-color: #f44336 !important;
+    }
+
+    &.safe {
+      border-left-color: #4caf50 !important;
+    }
+  }
+
+  .budget-title {
     color: #e0e0e0 !important;
   }
 
-  h2,
-  h3 {
-    color: #e0e0e0 !important;
-  }
-
-  p {
+  .budget-amounts span {
     color: #bbb !important;
   }
 
-  // Auth pages
+  .budget-amounts strong {
+    color: #e0e0e0 !important;
+  }
+
+  .budget-percent {
+    color: #888 !important;
+  }
+
+  .budget-message {
+    color: #aaa !important;
+  }
+
+  .danger-msg {
+    color: #ef5350 !important;
+  }
+
+  .warning-msg {
+    color: #ffa726 !important;
+  }
+
+  .safe-msg {
+    color: #66bb6a !important;
+  }
+
+  // Budget input
+  .budget-field input {
+    color: #e0e0e0 !important;
+  }
+
+  // Recent transactions table header
+  .recent-card {
+    background: #1e1e1e !important;
+  }
+
+  // ---- Expenses Page ----
+  .filter-card {
+    background: #1e1e1e !important;
+  }
+
+  .summary-bar {
+    color: #aaa !important;
+
+    strong {
+      color: #e0e0e0 !important;
+    }
+  }
+
+  .income-total {
+    color: #66bb6a !important;
+  }
+
+  .expense-total {
+    color: #ef5350 !important;
+  }
+
+  .net-total {
+    &.positive {
+      color: #66bb6a !important;
+    }
+
+    &.negative {
+      color: #ef5350 !important;
+    }
+  }
+
+  .income-amount {
+    color: #66bb6a !important;
+  }
+
+  .expense-amount {
+    color: #ef5350 !important;
+  }
+
+  .filter-indicator {
+    color: #7986cb !important;
+  }
+
+  // ---- Budget Page ----
+  .budget-container {
+    h2 {
+      color: #e0e0e0 !important;
+    }
+
+    .subtitle {
+      color: #888 !important;
+    }
+  }
+
+  .budget-card {
+    background: #1e1e1e !important;
+
+    .category-name {
+      color: #e0e0e0 !important;
+    }
+
+    .spent {
+      color: #e0e0e0 !important;
+    }
+
+    .limit {
+      color: #aaa !important;
+    }
+
+    .percentage {
+      color: #888 !important;
+    }
+
+    .budget-footer {
+      color: #aaa !important;
+    }
+  }
+
+  .empty-state {
+    color: #555 !important;
+
+    mat-icon {
+      color: #555 !important;
+    }
+
+    p {
+      color: #555 !important;
+    }
+  }
+
+  // ---- Analytics Page ----
+  .analytics-container {
+    .subtitle {
+      color: #888 !important;
+    }
+  }
+
+  .kpi-card {
+    background: #1e1e1e !important;
+  }
+
+  .kpi-sub {
+    color: #666 !important;
+  }
+
+  .chart-card {
+    background: #1e1e1e !important;
+
+    mat-card-title {
+      color: #e0e0e0 !important;
+    }
+
+    mat-card-subtitle {
+      color: #888 !important;
+    }
+  }
+
+  // ---- Profile Page ----
+  .profile-sidebar {
+    .avatar-card {
+      background: #1e1e1e !important;
+    }
+
+    .username {
+      color: #e0e0e0 !important;
+    }
+
+    .email {
+      color: #aaa !important;
+    }
+
+    .stats-card {
+      background: #1e1e1e !important;
+    }
+
+    .stat-label {
+      color: #aaa !important;
+    }
+
+    .stat-val {
+      color: #7986cb !important;
+    }
+  }
+
+  .profile-main {
+    .form-card {
+      background: #1e1e1e !important;
+    }
+  }
+
+  .field-icon {
+    color: #aaa !important;
+  }
+
+  // ---- Auth Pages ----
   .auth-container {
     background: #121212 !important;
   }
 
   .auth-card {
     background: #1e1e1e !important;
+
+    mat-card-title {
+      color: #e0e0e0 !important;
+    }
+
+    mat-card-subtitle {
+      color: #aaa !important;
+    }
+
+    a {
+      color: #7986cb !important;
+    }
+
+    p {
+      color: #aaa !important;
+    }
   }
 
-  // Snackbar
-  .mat-snack-bar-container {
-    background: #333 !important;
-    color: #fff !important;
+  // ---- Chart text ----
+  canvas {
+    filter: brightness(0.95);
+  }
+
+  // ---- Category chips in dark mode ----
+  .category-chip {
+    &.food { background: #1b5e20 !important; color: #a5d6a7 !important; }
+    &.transport { background: #0d47a1 !important; color: #90caf9 !important; }
+    &.entertainment { background: #880e4f !important; color: #f48fb1 !important; }
+    &.shopping { background: #e65100 !important; color: #ffcc80 !important; }
+    &.health { background: #4a148c !important; color: #ce93d8 !important; }
+    &.bills { background: #004d40 !important; color: #80cbc4 !important; }
+    &.salary { background: #1b5e20 !important; color: #a5d6a7 !important; }
+    &.investment { background: #1a237e !important; color: #9fa8da !important; }
+    &.freelance { background: #f57f17 !important; color: #fff9c4 !important; }
+    &.other { background: #333 !important; color: #bbb !important; }
+  }
+
+  // ---- Type badges in dark mode ----
+  .type-badge {
+    &.income-badge {
+      background: #1b5e20 !important;
+      color: #a5d6a7 !important;
+    }
+    &.expense-badge {
+      background: #7f0000 !important;
+      color: #ef9a9a !important;
+    }
+  }
+
+  // ---- Pagination arrows ----
+  .mat-mdc-paginator {
+    .mat-mdc-icon-button {
+      color: #e0e0e0 !important;
+      &:disabled {
+        color: #555 !important;
+        opacity: 0.5;
+      }
+      mat-icon, .mat-icon {
+        color: #e0e0e0 !important;
+      }
+    }
+    .mat-mdc-paginator-range-label {
+      color: #bbb !important;
+    }
+    .mat-mdc-paginator-page-size-label {
+      color: #bbb !important;
+    }
+    .mat-mdc-select-value {
+      color: #e0e0e0 !important;
+    }
+  }
+  
+  // ---- Paginator arrows — stronger override ----
+  .mat-mdc-paginator {
+    background: #1e1e1e !important;
+    color: #e0e0e0 !important;
+
+    // Active arrows
+    button.mat-mdc-icon-button:not([disabled]) {
+      color: #e0e0e0 !important;
+      mat-icon { color: #e0e0e0 !important; }
+      svg { fill: #e0e0e0 !important; }
+      .mat-mdc-button-touch-target { opacity: 1 !important; }
+    }
+
+    // Disabled arrows
+    button.mat-mdc-icon-button[disabled] {
+      color: #444 !important;
+      opacity: 1 !important;
+      mat-icon { color: #444 !important; }
+      svg { fill: #444 !important; }
+    }
+
+    // Page size text
+    .mat-mdc-paginator-page-size-label,
+    .mat-mdc-paginator-range-label {
+      color: #bbb !important;
+    }
+
+    // Items per page select
+    .mat-mdc-select-value,
+    .mat-mdc-select-arrow {
+      color: #e0e0e0 !important;
+    }
+
+    // The select wrapper background
+    .mat-mdc-form-field .mdc-text-field {
+      background: #2a2a2a !important;
+    }
+  }
+
+  // ---- Scrollbar styling ----
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #555 #2a2a2a;
+  }
+  *::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  *::-webkit-scrollbar-track {
+    background: #2a2a2a;
+    border-radius: 3px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 3px;
+    &:hover { background: #777; }
+  }
+
+  // ---- Dropdown panel scrollbar ----
+  .mat-mdc-select-panel,
+  .mat-select-panel {
+    background: #2a2a2a !important;
+    scrollbar-color: #555 #2a2a2a !important;
+    &::-webkit-scrollbar-track {
+      background: #2a2a2a !important;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: #555 !important;
+    }
   }
 }

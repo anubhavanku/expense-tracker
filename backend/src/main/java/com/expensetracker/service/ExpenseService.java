@@ -6,8 +6,13 @@ import com.expensetracker.model.Expense.TransactionType;
 import com.expensetracker.model.User;
 import com.expensetracker.repository.ExpenseRepository;
 import com.expensetracker.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
+import com.expensetracker.dto.PageResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -48,11 +53,12 @@ public class ExpenseService {
                 .stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
-    public List<ExpenseDTO> getExpensesByCategory(
-            Long userId, String category) {
-        return expenseRepository
-                .findByUserIdAndCategory(userId, category)
-                .stream().map(this::mapToDTO).collect(Collectors.toList());
+    public List<ExpenseDTO> getExpensesByCategory(Long userId, String category) {
+        return expenseRepository.findByUserId(userId)
+                .stream()
+                .filter(e -> e.getCategory().equals(category))
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
     }
 
     public List<ExpenseDTO> getExpensesByDateRange(
@@ -60,6 +66,78 @@ public class ExpenseService {
         return expenseRepository
                 .findByUserIdAndExpenseDateBetween(userId, start, end)
                 .stream().map(this::mapToDTO).collect(Collectors.toList());
+    }
+
+    public PageResponse<ExpenseDTO> getExpensesWithFilters(
+            Long userId,
+            String category,
+            String type,
+            LocalDate start,
+            LocalDate end,
+            int page,
+            int size,
+            String sortBy,
+            String sortDir) {
+
+        // Handle valid sort fields only
+        List<String> validSortFields = List.of(
+                "expenseDate", "amount", "title", "category", "type");
+        String safeSortBy = validSortFields.contains(sortBy)
+                ? sortBy : "expenseDate";
+
+        Sort sort = sortDir.equalsIgnoreCase("asc")
+                ? Sort.by(safeSortBy).ascending()
+                : Sort.by(safeSortBy).descending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        TransactionType transactionType = null;
+        if (type != null && !type.isEmpty() && !type.equals("ALL")) {
+            try {
+                transactionType = TransactionType.valueOf(type);
+            } catch (IllegalArgumentException e) {
+                transactionType = null;
+            }
+        }
+
+        String categoryParam = (category != null
+                && !category.isEmpty()
+                && !category.equals("All")) ? category : null;
+
+        Page<Expense> result = expenseRepository.findWithFilters(
+                userId, categoryParam, transactionType, start, end, pageable);
+
+        List<ExpenseDTO> content = result.getContent()
+                .stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+
+        // Calculate totals across ALL filtered results (not just current page)
+        List<Expense> allFiltered = expenseRepository.findWithFilters(
+                userId, categoryParam, transactionType, start, end,
+                PageRequest.of(0, Integer.MAX_VALUE, sort)
+        ).getContent();
+
+        double totalIncome = allFiltered.stream()
+                .filter(e -> e.getType() == TransactionType.INCOME)
+                .mapToDouble(e -> e.getAmount().doubleValue())
+                .sum();
+
+        double totalExpense = allFiltered.stream()
+                .filter(e -> e.getType() == TransactionType.EXPENSE)
+                .mapToDouble(e -> e.getAmount().doubleValue())
+                .sum();
+
+        return new PageResponse<>(
+                content,
+                result.getNumber(),
+                result.getSize(),
+                result.getTotalElements(),
+                result.getTotalPages(),
+                result.isLast(),
+                totalIncome,
+                totalExpense
+        );
     }
 
     public ExpenseDTO updateExpense(Long id, ExpenseDTO dto) {

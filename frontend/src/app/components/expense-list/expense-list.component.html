@@ -1,11 +1,12 @@
 <div class="expense-container">
   <div class="header">
-    <h2>My Expenses</h2>
+    <h2>My Transactions</h2>
     <button mat-raised-button color="primary" (click)="showForm = !showForm; selectedExpense = null">
-      {{ showForm ? 'Cancel' : '+ Add Expense' }}
+      {{ showForm ? 'Cancel' : '+ Add Transaction' }}
     </button>
   </div>
 
+  <!-- Add/Edit Form -->
   <app-expense-form *ngIf="showForm" [expenseToEdit]="selectedExpense" (expenseSaved)="onExpenseSaved()">
   </app-expense-form>
 
@@ -20,16 +21,27 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline">
+        <mat-label>Type</mat-label>
+        <mat-select formControlName="type">
+          <mat-option value="ALL">All</mat-option>
+          <mat-option value="EXPENSE">📤 Expense</mat-option>
+          <mat-option value="INCOME">📥 Income</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
         <mat-label>Start Date</mat-label>
         <input matInput [matDatepicker]="startPicker" formControlName="startDate">
-        <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+        <mat-datepicker-toggle matSuffix [for]="startPicker">
+        </mat-datepicker-toggle>
         <mat-datepicker #startPicker></mat-datepicker>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>End Date</mat-label>
         <input matInput [matDatepicker]="endPicker" formControlName="endDate">
-        <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+        <mat-datepicker-toggle matSuffix [for]="endPicker">
+        </mat-datepicker-toggle>
         <mat-datepicker #endPicker></mat-datepicker>
       </mat-form-field>
 
@@ -40,41 +52,61 @@
     </form>
   </mat-card>
 
-  <!-- Summary -->
+  <!-- Summary Bar -->
   <div class="summary-bar">
-    <span>Showing <strong>{{ expenses.length }}</strong> transactions</span>
+    <span>
+      Showing <strong>{{ expenses.length }}</strong>
+      of <strong>{{ totalElements }}</strong> transactions
+      <span class="filter-indicator" *ngIf="filterForm.get('type')?.value !== 'ALL'
+        || filterForm.get('category')?.value !== 'All'
+        || filterForm.get('startDate')?.value
+        || filterForm.get('endDate')?.value">
+        (filtered)
+      </span>
+    </span>
     <div class="summary-totals">
       <span class="income-total">
-        📥 Income: <strong>₹{{ getTotalIncome() | number:'1.2-2' }}</strong>
+        📥 Income:
+        <strong>₹{{ totalIncome | number:'1.2-2' }}</strong>
       </span>
       <span class="divider">|</span>
       <span class="expense-total">
-        📤 Expenses: <strong>₹{{ getTotalExpenses() | number:'1.2-2' }}</strong>
+        📤 Expenses:
+        <strong>₹{{ totalExpenseAmount | number:'1.2-2' }}</strong>
       </span>
       <span class="divider">|</span>
-      <span class="net-total" [ngClass]="(getTotalIncome() - getTotalExpenses()) >= 0
+      <span class="net-total" [ngClass]="(totalIncome - totalExpenseAmount) >= 0
         ? 'positive' : 'negative'">
-        💰 Net: <strong>
-          ₹{{ (getTotalIncome() - getTotalExpenses()) | number:'1.2-2' }}
+        💰 Net:
+        <strong>
+          ₹{{ (totalIncome - totalExpenseAmount) | number:'1.2-2' }}
         </strong>
       </span>
     </div>
   </div>
 
   <!-- Table -->
-  <mat-table [dataSource]="expenses" class="expense-table mat-elevation-z2">
+  <mat-table [dataSource]="expenses" matSort (matSortChange)="onSortChange($event)"
+    class="expense-table mat-elevation-z2">
+
     <ng-container matColumnDef="date">
-      <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header="expenseDate">
+        Date
+      </mat-header-cell>
       <mat-cell *matCellDef="let e">{{ e.expenseDate }}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="title">
-      <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header="title">
+        Title
+      </mat-header-cell>
       <mat-cell *matCellDef="let e">{{ e.title }}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="type">
-      <mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header="type">
+        Type
+      </mat-header-cell>
       <mat-cell *matCellDef="let e">
         <span class="type-badge" [ngClass]="e.type === 'INCOME' ? 'income-badge' : 'expense-badge'">
           {{ e.type === 'INCOME' ? '📥 Income' : '📤 Expense' }}
@@ -83,15 +115,27 @@
     </ng-container>
 
     <ng-container matColumnDef="category">
-      <mat-header-cell *matHeaderCellDef>Category</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header="category">
+        Category
+      </mat-header-cell>
       <mat-cell *matCellDef="let e">
-        <span class="category-chip" [ngClass]="e.category.toLowerCase()">{{ e.category }}</span>
+        <span class="category-chip" [ngClass]="e.category.toLowerCase()">
+          {{ e.category }}
+        </span>
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="amount">
-      <mat-header-cell *matHeaderCellDef>Amount</mat-header-cell>
-      <mat-cell *matCellDef="let e"><strong>₹{{ e.amount | number:'1.2-2' }}</strong></mat-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header="amount">
+        Amount
+      </mat-header-cell>
+      <mat-cell *matCellDef="let e">
+        <strong [ngClass]="e.type === 'INCOME'
+          ? 'income-amount' : 'expense-amount'">
+          {{ e.type === 'INCOME' ? '+' : '-' }}
+          ₹{{ e.amount | number:'1.2-2' }}
+        </strong>
+      </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="actions">
@@ -106,12 +150,20 @@
       </mat-cell>
     </ng-container>
 
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    <mat-header-row *matHeaderRowDef="displayedColumns">
+    </mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;">
+    </mat-row>
   </mat-table>
 
+  <!-- Empty State -->
   <div *ngIf="expenses.length === 0" class="empty-state">
     <mat-icon>receipt_long</mat-icon>
-    <p>No expenses found. Add your first expense!</p>
+    <p>No transactions found.</p>
   </div>
+
+  <!-- Paginator -->
+  <mat-paginator [length]="totalElements" [pageSize]="pageSize" [pageIndex]="pageIndex"
+    [pageSizeOptions]="pageSizeOptions" (page)="onPageChange($event)" showFirstLastButtons>
+  </mat-paginator>
 </div>

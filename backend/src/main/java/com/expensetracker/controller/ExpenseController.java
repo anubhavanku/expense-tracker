@@ -11,6 +11,8 @@ import java.util.List;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import com.expensetracker.dto.PageResponse;
+import java.time.LocalDate;
 
 @Tag(name = "Transactions", description = "Manage income and expenses")
 @SecurityRequirement(name = "bearerAuth")
@@ -89,5 +91,27 @@ public class ExpenseController {
             @PathVariable Long userId,
             @PathVariable String type) {
         return ResponseEntity.ok(expenseService.getByType(userId, type));
+    }
+
+    @GetMapping("/user/{userId}/paged")
+    @Operation(summary = "Get paginated and filtered transactions")
+    public ResponseEntity<PageResponse<ExpenseDTO>> getPagedExpenses(
+            @PathVariable Long userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "expenseDate") String sortBy,
+            @RequestParam(defaultValue = "desc") String sortDir,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end) {
+
+        return ResponseEntity.ok(
+                expenseService.getExpensesWithFilters(
+                        userId, category, type, start, end,
+                        page, size, sortBy, sortDir)
+        );
     }
 }

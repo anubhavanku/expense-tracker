@@ -13,6 +13,17 @@ export interface Expense {
   type: 'INCOME' | 'EXPENSE';
 }
 
+export interface PageResponse<T> {
+  content: T[];
+  pageNumber: number;
+  pageSize: number;
+  totalElements: number;
+  totalPages: number;
+  last: boolean;
+  totalIncome: number;
+  totalExpense: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -61,5 +72,25 @@ export class ExpenseService {
   getByType(userId: number, type: string): Observable<Expense[]> {
     return this.http.get<Expense[]>(
       `${this.apiUrl}/user/${userId}/type/${type}`);
+  }
+
+  getPagedExpenses(
+    userId: number,
+    page: number = 0,
+    size: number = 10,
+    sortBy: string = 'expenseDate',
+    sortDir: string = 'desc',
+    category?: string,
+    type?: string,
+    start?: string,
+    end?: string
+  ): Observable<PageResponse<Expense>> {
+    let params = `page=${page}&size=${size}&sortBy=${sortBy}&sortDir=${sortDir}`;
+    if (category && category !== 'All') params += `&category=${category}`;
+    if (type && type !== 'ALL') params += `&type=${type}`;
+    if (start) params += `&start=${start}`;
+    if (end) params += `&end=${end}`;
+    return this.http.get<PageResponse<Expense>>(
+      `${this.apiUrl}/user/${userId}/paged?${params}`);
   }
 }
