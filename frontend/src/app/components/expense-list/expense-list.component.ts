@@ -24,6 +24,7 @@ export class ExpenseListComponent implements OnInit {
   selectedExpense: Expense | null = null;
   showForm = false;
   filterForm: FormGroup;
+  isLoading = false;
 
   // Pagination state
   totalElements = 0;
@@ -65,6 +66,7 @@ export class ExpenseListComponent implements OnInit {
   loadExpenses(): void {
     const user = this.authService.getCurrentUser();
     if (!user) return;
+    this.isLoading = true;
 
     const { category, type, startDate, endDate } = this.filterForm.value;
     const start = startDate
@@ -81,17 +83,10 @@ export class ExpenseListComponent implements OnInit {
       this.totalElements = data.totalElements;
       this.totalIncome = data.totalIncome;
       this.totalExpenseAmount = data.totalExpense;
+      this.isLoading = false;
     });
   }
 
-  // calculateSummary(): void {
-  //   this.totalIncome = this.expenses
-  //     .filter(e => e.type === 'INCOME')
-  //     .reduce((s, e) => s + Number(e.amount), 0);
-  //   this.totalExpenseAmount = this.expenses
-  //     .filter(e => e.type === 'EXPENSE')
-  //     .reduce((s, e) => s + Number(e.amount), 0);
-  // }
 
   onPageChange(event: PageEvent): void {
     this.pageIndex = event.pageIndex;

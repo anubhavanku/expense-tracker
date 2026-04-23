@@ -1,5 +1,10 @@
-<app-navbar
-  [isDarkMode]="isDarkMode"
-  (toggleDark)="toggleDarkMode()">
+<!-- Global route loading bar -->
+<div class="global-loading-bar" *ngIf="isRouteLoading">
+  <mat-progress-bar mode="indeterminate" color="accent">
+  </mat-progress-bar>
+</div>
+
+<app-navbar [isDarkMode]="isDarkMode" (toggleDark)="toggleDarkMode()">
 </app-navbar>
+
 <router-outlet></router-outlet>

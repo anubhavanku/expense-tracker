@@ -884,40 +884,181 @@ a {
 
   // ---- Insights Page ----
   .insights-container {
-    .subtitle { color: #888 !important; }
+    .subtitle {
+      color: #888 !important;
+    }
   }
+
   .insight-card {
     background: #1e1e1e !important;
-    &.positive { border-left-color: #4caf50 !important; }
-    &.negative { border-left-color: #ef5350 !important; }
-    &.warning { border-left-color: #ffa726 !important; }
-    &.neutral { border-left-color: #42a5f5 !important; }
+
+    &.positive {
+      border-left-color: #4caf50 !important;
+    }
+
+    &.negative {
+      border-left-color: #ef5350 !important;
+    }
+
+    &.warning {
+      border-left-color: #ffa726 !important;
+    }
+
+    &.neutral {
+      border-left-color: #42a5f5 !important;
+    }
   }
+
   .insight-icon-wrapper {
-    &.positive { background: #1b5e20 !important; }
-    &.negative { background: #7f0000 !important; }
-    &.warning { background: #e65100 !important; }
-    &.neutral { background: #0d47a1 !important; }
+    &.positive {
+      background: #1b5e20 !important;
+    }
+
+    &.negative {
+      background: #7f0000 !important;
+    }
+
+    &.warning {
+      background: #e65100 !important;
+    }
+
+    &.neutral {
+      background: #0d47a1 !important;
+    }
   }
-  .insight-title { color: #e0e0e0 !important; }
-  .insight-message { color: #aaa !important; }
+
+  .insight-title {
+    color: #e0e0e0 !important;
+  }
+
+  .insight-message {
+    color: #aaa !important;
+  }
+
   .insight-value {
-    &.positive { color: #66bb6a !important; }
-    &.negative { color: #ef5350 !important; }
-    &.warning { color: #ffa726 !important; }
-    &.neutral { color: #42a5f5 !important; }
+    &.positive {
+      color: #66bb6a !important;
+    }
+
+    &.negative {
+      color: #ef5350 !important;
+    }
+
+    &.warning {
+      color: #ffa726 !important;
+    }
+
+    &.neutral {
+      color: #42a5f5 !important;
+    }
   }
+
   .insight-badge {
-    &.positive { color: #66bb6a !important; }
-    &.negative { color: #ef5350 !important; }
-    &.warning { color: #ffa726 !important; }
-    &.neutral { color: #42a5f5 !important; }
+    &.positive {
+      color: #66bb6a !important;
+    }
+
+    &.negative {
+      color: #ef5350 !important;
+    }
+
+    &.warning {
+      color: #ffa726 !important;
+    }
+
+    &.neutral {
+      color: #42a5f5 !important;
+    }
   }
+
   .skeleton-card {
-    background: linear-gradient(
-      90deg, #2a2a2a 25%, #333 50%, #2a2a2a 75%
-    ) !important;
+    background: linear-gradient(90deg, #2a2a2a 25%, #333 50%, #2a2a2a 75%) !important;
     background-size: 200% 100% !important;
+  }
+}
+
+// ============================================
+// SKELETON LOADING STYLES
+// ============================================
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-text {
+  border-radius: 4px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+
+  &.short {
+    height: 12px;
+    width: 60%;
+  }
+
+  &.medium {
+    height: 12px;
+    width: 80%;
+  }
+
+  &.long {
+    height: 20px;
+    width: 90%;
+  }
+}
+
+.skeleton-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+
+  &.small {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+.skeleton-chart {
+  height: 280px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.skeleton-row {
+  display: flex;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+  align-items: center;
+
+  div {
+    flex: 1;
+  }
+}
+
+// Dark mode skeletons
+.dark-theme {
+
+  .skeleton-text,
+  .skeleton-circle,
+  .skeleton-chart {
+    background: linear-gradient(90deg, #2a2a2a 25%, #333 50%, #2a2a2a 75%) !important;
+    background-size: 200% 100% !important;
+  }
+
+  .skeleton-row {
+    border-bottom-color: #333 !important;
   }
 }
 

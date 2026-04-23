@@ -1,8 +1,19 @@
 <div class="dashboard-container">
   <h2>Dashboard</h2>
 
+  <!-- Stats Skeleton -->
+  <div class="stats-row" *ngIf="isLoadingStats">
+    <mat-card class="stat-card skeleton-card" *ngFor="let i of [1,2,3,4,5]">
+      <mat-card-content>
+        <div class="skeleton-circle"></div>
+        <div class="skeleton-text short"></div>
+        <div class="skeleton-text long"></div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
   <!-- Stats Row -->
-  <div class="stats-row">
+  <div class="stats-row" *ngIf="!isLoadingStats">
     <mat-card class="stat-card">
       <mat-card-content>
         <div class="stat-icon" style="background:#e8eaf6">💰</div>
@@ -98,8 +109,19 @@
     </mat-card-content>
   </mat-card>
 
+  <!-- Charts Skeleton -->
+  <div class="charts-row" *ngIf="isLoadingCharts">
+    <mat-card class="chart-card" *ngFor="let i of [1,2,3]">
+      <mat-card-content>
+        <div class="skeleton-text medium" style="margin-bottom:16px">
+        </div>
+        <div class="skeleton-chart"></div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
   <!-- Pie + Monthly Charts Row -->
-  <div class="charts-row">
+  <div class="charts-row" *ngIf="!isLoadingCharts">
     <mat-card class="chart-card">
       <mat-card-header>
         <mat-card-title>Spending by Category</mat-card-title>
@@ -146,6 +168,21 @@
       <div class="chart-wrapper">
         <canvas baseChart [data]="dailyChartData" [type]="dailyChartType" [options]="dailyChartOptions">
         </canvas>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Recent Skeleton -->
+  <mat-card class="recent-card" *ngIf="isLoadingRecent">
+    <mat-card-header>
+      <mat-card-title>Recent Transactions</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="skeleton-row" *ngFor="let i of [1,2,3,4,5]">
+        <div class="skeleton-text short"></div>
+        <div class="skeleton-text medium"></div>
+        <div class="skeleton-text short"></div>
+        <div class="skeleton-text short"></div>
       </div>
     </mat-card-content>
   </mat-card>

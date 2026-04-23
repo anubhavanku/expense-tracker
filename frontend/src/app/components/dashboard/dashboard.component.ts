@@ -17,6 +17,10 @@ export class DashboardComponent implements OnInit {
   currentMonthSpent = 0;
   currentMonthIncome = 0;
 
+  isLoadingStats = true;
+  isLoadingCharts = true;
+  isLoadingRecent = true;
+
   // Income vs Expense Bar Chart
   incomeExpenseType: ChartType = 'bar';
   incomeExpenseData: ChartData<'bar'> = { labels: [], datasets: [] };
@@ -114,6 +118,8 @@ export class DashboardComponent implements OnInit {
     // All-time totals
     this.expenseService.getTotalExpenses(user.id).subscribe(total => {
       this.totalExpenses = total || 0;
+      this.updateBudgetStatus();
+      this.isLoadingStats = false;
     });
 
     this.expenseService.getTotalIncome(user.id).subscribe(income => {
@@ -129,11 +135,14 @@ export class DashboardComponent implements OnInit {
       this.recentExpenses = expensesOnly.slice(-5).reverse();
       this.buildMonthlyChart(expensesOnly);
       this.buildDailyChart(expensesOnly);
+      this.isLoadingCharts = false;
+      this.isLoadingRecent = false;
     });
 
-    // Current month only — for budget and pie chart
-    const firstDay = `${this.currentYear}-${String(this.currentMonth).padStart(2, '0')}-01`;
-    const lastDay = new Date(this.currentYear, this.currentMonth, 0)
+    const firstDay = `${this.currentYear}-${String(
+      this.currentMonth).padStart(2, '0')}-01`;
+    const lastDay = new Date(
+      this.currentYear, this.currentMonth, 0)
       .toISOString().split('T')[0];
 
     this.expenseService.getExpensesByDateRange(

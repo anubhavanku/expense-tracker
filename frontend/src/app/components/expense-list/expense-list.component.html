@@ -85,8 +85,14 @@
     </div>
   </div>
 
+  <!-- Loading spinner -->
+  <div class="table-loading" *ngIf="isLoading">
+    <mat-spinner diameter="48"></mat-spinner>
+    <p>Loading transactions...</p>
+  </div>
+
   <!-- Table -->
-  <mat-table [dataSource]="expenses" matSort (matSortChange)="onSortChange($event)"
+  <mat-table [dataSource]="expenses" matSort *ngIf="!isLoading" (matSortChange)="onSortChange($event)"
     class="expense-table mat-elevation-z2">
 
     <ng-container matColumnDef="date">
@@ -157,7 +163,7 @@
   </mat-table>
 
   <!-- Empty State -->
-  <div *ngIf="expenses.length === 0" class="empty-state">
+  <div *ngIf="!isLoading && expenses.length === 0" class="empty-state">
     <mat-icon>receipt_long</mat-icon>
     <p>No transactions found.</p>
   </div>

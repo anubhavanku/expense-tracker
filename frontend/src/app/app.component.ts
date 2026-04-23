@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import {
+  Router, NavigationStart, NavigationEnd,
+  NavigationCancel, NavigationError
+} from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -7,6 +11,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppComponent implements OnInit {
   isDarkMode = false;
+  isRouteLoading = false;
+
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
     const saved = localStorage.getItem('darkMode');
@@ -14,6 +21,19 @@ export class AppComponent implements OnInit {
       this.isDarkMode = true;
       document.body.classList.add('dark-theme');
     }
+
+    // Listen to route changes
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationStart) {
+        this.isRouteLoading = true;
+      } else if (
+        event instanceof NavigationEnd ||
+        event instanceof NavigationCancel ||
+        event instanceof NavigationError
+      ) {
+        this.isRouteLoading = false;
+      }
+    });
   }
 
   toggleDarkMode(): void {

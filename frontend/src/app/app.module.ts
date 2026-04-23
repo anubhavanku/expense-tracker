@@ -26,6 +26,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -83,7 +84,8 @@ import { InsightsComponent } from './components/insights/insights.component';
     MatTabsModule,
     MatTooltipModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     {

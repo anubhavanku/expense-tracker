@@ -15,6 +15,7 @@ export class AnalyticsComponent implements OnInit {
   avgPerTransaction = 0;
   highestExpense: Expense | null = null;
   mostFrequentCategory = '-';
+  isLoading = true;
 
   // Category bar chart
   categoryBarType: ChartType = 'bar';
@@ -92,6 +93,7 @@ export class AnalyticsComponent implements OnInit {
       this.buildCategoryBar(expensesOnly);
       this.buildTrend(expensesOnly);
       this.buildDoughnut(expensesOnly);
+      this.isLoading = false;
     });
   }
 
