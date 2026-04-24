@@ -1,0 +1,11 @@
+# Environment variables — never push these
+.env
+*.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+*.iml
