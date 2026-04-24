@@ -6,30 +6,18 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
 
   # ============================================
-  # Job 1 — Backend Tests + Build
+  # Job 1 — Backend Build
   # ============================================
   backend:
-    name: Backend — Test & Build
+    name: Backend — Build
     runs-on: ubuntu-latest
-
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: expense_tracker_test
-          MYSQL_USER: expenseuser
-          MYSQL_PASSWORD: expense123
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
 
     steps:
       - name: Checkout code
@@ -85,7 +73,7 @@ jobs:
           path: frontend/dist/
 
   # ============================================
-  # Job 3 — Docker Build (runs after both pass)
+  # Job 3 — Docker Build
   # ============================================
   docker:
     name: Docker — Build Images
@@ -112,15 +100,11 @@ jobs:
         with:
           context: ./backend
           push: true
-          tags: |
-            ghcr.io/${{ github.repository }}/backend:latest
-            ghcr.io/${{ github.repository }}/backend:${{ github.sha }}
+          tags: ghcr.io/${{ github.repository_owner }}/expense-tracker-backend:latest
 
       - name: Build and push frontend image
         uses: docker/build-push-action@v5
         with:
           context: ./frontend
           push: true
-          tags: |
-            ghcr.io/${{ github.repository }}/frontend:latest
-            ghcr.io/${{ github.repository }}/frontend:${{ github.sha }}
+          tags: ghcr.io/${{ github.repository_owner }}/expense-tracker-frontend:latest
