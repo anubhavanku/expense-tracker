@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BudgetService, Budget } from '../../services/budget.service';
 import { AuthService } from '../../services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-budget',
@@ -22,7 +24,8 @@ export class BudgetComponent implements OnInit {
     private fb: FormBuilder,
     private budgetService: BudgetService,
     private authService: AuthService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {
     this.budgetForm = this.fb.group({
       category: ['', Validators.required],
@@ -36,7 +39,7 @@ export class BudgetComponent implements OnInit {
     const user = this.authService.getCurrentUser();
     if (!user) return;
     this.budgetService.getBudgets(
-        user.id, this.currentMonth, this.currentYear)
+      user.id, this.currentMonth, this.currentYear)
       .subscribe(data => this.budgets = data);
   }
 
@@ -62,16 +65,30 @@ export class BudgetComponent implements OnInit {
   }
 
   deleteBudget(id: number): void {
-    this.budgetService.deleteBudget(id).subscribe({
-      next: () => {
-        this.snackBar.open('Budget removed', 'Close', { duration: 2000 });
-        this.loadBudgets();
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '380px',
+      data: {
+        title: 'Delete Budget',
+        message: 'Are you sure you want to remove this budget? Your transactions will not be affected.',
+        confirmText: 'Delete',
+        confirmColor: 'warn'
+      }
+    });
+    dialogRef.afterClosed().subscribe(confirmed => {
+      if (confirmed) {
+        this.budgetService.deleteBudget(id).subscribe({
+          next: () => {
+            this.snackBar.open('Budget removed', 'Close',
+              { duration: 2000 });
+            this.loadBudgets();
+          }
+        });
       }
     });
   }
 
   getStatusColor(status: string): string {
-    switch(status) {
+    switch (status) {
       case 'EXCEEDED': return '#c62828';
       case 'DANGER': return '#e53935';
       case 'WARNING': return '#fb8c00';
@@ -80,7 +97,7 @@ export class BudgetComponent implements OnInit {
   }
 
   getProgressColor(status: string): string {
-    switch(status) {
+    switch (status) {
       case 'EXCEEDED':
       case 'DANGER': return 'warn';
       case 'WARNING': return 'accent';
@@ -89,7 +106,7 @@ export class BudgetComponent implements OnInit {
   }
 
   getStatusLabel(status: string): string {
-    switch(status) {
+    switch (status) {
       case 'EXCEEDED': return '🚨 Exceeded';
       case 'DANGER': return '⚠️ Critical';
       case 'WARNING': return '🔔 Warning';

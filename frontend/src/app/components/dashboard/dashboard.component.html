@@ -97,8 +97,19 @@
 
       <div class="budget-percent">{{ budgetUsedPercent | number:'1.0-0' }}% used</div>
 
-      <div class="budget-message danger-msg" *ngIf="budgetStatus === 'danger'">
+      <!-- <div class="budget-message danger-msg" *ngIf="budgetStatus === 'danger'">
         🚨 You've used over 90% of your monthly budget!
+      </div>
+      <div class="budget-message warning-msg" *ngIf="budgetStatus === 'warning'">
+        🔔 You've used over 70% of your monthly budget.
+      </div>
+      <div class="budget-message safe-msg" *ngIf="budgetStatus === 'safe'">
+        ✅ You're within your monthly budget.
+      </div> -->
+      <div class="budget-message danger-msg" *ngIf="budgetStatus === 'danger'">
+        🚨 {{ currentMonthSpent > budgetLimit
+        ? 'You have exceeded your monthly budget!'
+        : 'You\'ve used over 90% of your monthly budget!' }}
       </div>
       <div class="budget-message warning-msg" *ngIf="budgetStatus === 'warning'">
         🔔 You've used over 70% of your monthly budget.

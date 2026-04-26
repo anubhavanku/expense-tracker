@@ -1,0 +1,257 @@
+<div class="recurring-container">
+  <div class="header">
+    <div>
+      <h2>🔄 Recurring Transactions</h2>
+      <p class="subtitle">
+        Automate your regular income and expenses
+      </p>
+    </div>
+    <div class="header-actions">
+      <button mat-stroked-button (click)="manualProcess()" matTooltip="Process due transactions now">
+        <mat-icon>sync</mat-icon> Process Now
+      </button>
+      <button mat-raised-button color="primary" (click)="showForm = !showForm; selectedRecurring = null">
+        {{ showForm ? 'Cancel' : '+ Add Recurring' }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="summary-row" *ngIf="!isLoading">
+    <mat-card class="summary-card">
+      <mat-card-content>
+        <div class="summary-icon">🔄</div>
+        <div class="summary-label">Active</div>
+        <div class="summary-value">{{ getActiveCount() }}</div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="summary-card">
+      <mat-card-content>
+        <div class="summary-icon">📤</div>
+        <div class="summary-label">Monthly Expenses</div>
+        <div class="summary-value expense-val">
+          ₹{{ getTotalMonthlyExpense() | number:'1.0-0' }}
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="summary-card">
+      <mat-card-content>
+        <div class="summary-icon">📥</div>
+        <div class="summary-label">Monthly Income</div>
+        <div class="summary-value income-val">
+          ₹{{ getTotalMonthlyIncome() | number:'1.0-0' }}
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="summary-card">
+      <mat-card-content>
+        <div class="summary-icon">
+          {{ getNetMonthlyImpact() >= 0 ? '🟢' : '🔴' }}
+        </div>
+        <div class="summary-label">Net Monthly Impact</div>
+        <div class="summary-value" [ngClass]="getNetMonthlyImpact() >= 0
+          ? 'income-val' : 'expense-val'">
+          ₹{{ getNetMonthlyImpact() | number:'1.0-0' }}
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Add/Edit Form -->
+  <mat-card class="form-card" *ngIf="showForm">
+    <mat-card-header>
+      <mat-card-title>
+        {{ selectedRecurring ? 'Edit' : 'New' }} Recurring Transaction
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="recurringForm" (ngSubmit)="onSubmit()">
+
+        <!-- Type Toggle -->
+        <div class="type-toggle">
+          <button type="button" mat-stroked-button [ngClass]="{'active-expense': !isIncome}"
+            (click)="recurringForm.patchValue({type: 'EXPENSE'})">
+            📤 Expense
+          </button>
+          <button type="button" mat-stroked-button [ngClass]="{'active-income': isIncome}"
+            (click)="recurringForm.patchValue({type: 'INCOME'})">
+            📥 Income
+          </button>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Title</mat-label>
+            <input matInput formControlName="title" placeholder="e.g. Monthly Rent">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Amount (₹)</mat-label>
+            <input matInput formControlName="amount" type="number" placeholder="0.00">
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Category</mat-label>
+            <mat-select formControlName="category">
+              <mat-option *ngFor="let cat of categories" [value]="cat">{{ cat }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Frequency</mat-label>
+            <mat-select formControlName="frequency">
+              <mat-option *ngFor="let freq of frequencies" [value]="freq.value">{{ freq.label }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Start Date</mat-label>
+            <input matInput [matDatepicker]="startPicker" formControlName="startDate">
+            <mat-datepicker-toggle matSuffix [for]="startPicker">
+            </mat-datepicker-toggle>
+            <mat-datepicker #startPicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>End Date (Optional)</mat-label>
+            <input matInput [matDatepicker]="endPicker" formControlName="endDate">
+            <mat-datepicker-toggle matSuffix [for]="endPicker">
+            </mat-datepicker-toggle>
+            <mat-datepicker #endPicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Description (Optional)</mat-label>
+          <input matInput formControlName="description" placeholder="Add a note">
+        </mat-form-field>
+
+        <div class="form-actions">
+          <button mat-stroked-button type="button" (click)="resetForm()">Cancel</button>
+          <button mat-raised-button [color]="isIncome ? 'accent' : 'primary'" type="submit"
+            [disabled]="recurringForm.invalid">
+            {{ selectedRecurring ? 'Update' : 'Create' }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Loading -->
+  <div class="loading-state" *ngIf="isLoading">
+    <mat-spinner diameter="48"></mat-spinner>
+    <p>Loading recurring transactions...</p>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="!isLoading && recurring.length === 0">
+    <mat-icon>autorenew</mat-icon>
+    <p>No recurring transactions yet.</p>
+    <p>Add your first one — like monthly rent or salary!</p>
+    <button mat-raised-button color="primary" (click)="showForm = true">
+      + Add Recurring
+    </button>
+  </div>
+
+  <!-- Table -->
+  <div class="table-wrapper">
+    <mat-table [dataSource]="recurring" class="recurring-table mat-elevation-z2"
+      *ngIf="!isLoading && recurring.length > 0">
+
+      <ng-container matColumnDef="title">
+        <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
+        <mat-cell *matCellDef="let r">
+          <div class="title-cell">
+            <span>{{ r.title }}</span>
+            <span class="description" *ngIf="r.description">
+              {{ r.description }}
+            </span>
+          </div>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="type">
+        <mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
+        <mat-cell *matCellDef="let r">
+          <span class="type-badge" [ngClass]="r.type === 'INCOME'
+            ? 'income-badge' : 'expense-badge'">
+            {{ r.type === 'INCOME' ? '📥 Income' : '📤 Expense' }}
+          </span>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="amount">
+        <mat-header-cell *matHeaderCellDef>Amount</mat-header-cell>
+        <mat-cell *matCellDef="let r">
+          <strong [ngClass]="r.type === 'INCOME'
+          ? 'income-amount' : 'expense-amount'">
+            {{ r.type === 'INCOME' ? '+' : '-' }}
+            ₹{{ r.amount | number:'1.2-2' }}
+          </strong>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="category">
+        <mat-header-cell *matHeaderCellDef>Category</mat-header-cell>
+        <mat-cell *matCellDef="let r">
+          <span class="category-chip" [ngClass]="r.category.toLowerCase()">
+            {{ r.category }}
+          </span>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="frequency">
+        <mat-header-cell *matHeaderCellDef>Frequency</mat-header-cell>
+        <mat-cell *matCellDef="let r">
+          {{ getFrequencyLabel(r.frequency) }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="nextDueDate">
+        <mat-header-cell *matHeaderCellDef>Next Due</mat-header-cell>
+        <mat-cell *matCellDef="let r">
+          <span [ngClass]="isOverdue(r) ? 'overdue' : ''">
+            {{ r.nextDueDate }}
+          </span>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+        <mat-cell *matCellDef="let r">
+          <span class="status-badge" [ngClass]="r.active ? 'active' : 'paused'">
+            {{ r.active ? '✅ Active' : '⏸️ Paused' }}
+          </span>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+        <mat-cell *matCellDef="let r">
+          <button mat-icon-button color="primary" (click)="editRecurring(r)" matTooltip="Edit">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button (click)="toggleActive(r)" [matTooltip]="r.active ? 'Pause' : 'Activate'"
+            [color]="r.active ? 'accent' : 'primary'">
+            <mat-icon>{{ r.active ? 'pause' : 'play_arrow' }}</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteRecurring(r.id)" matTooltip="Delete">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns">
+      </mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;">
+      </mat-row>
+    </mat-table>
+  </div>
+</div>

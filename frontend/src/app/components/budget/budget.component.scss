@@ -158,3 +158,22 @@
     grid-template-columns: 1fr;
   }
 }
+
+.budget-tip {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #c62828;
+  padding: 6px 8px;
+  background: #fff5f5;
+  border-radius: 4px;
+
+  &.warning {
+    color: #e65100;
+    background: #fff8f0;
+  }
+
+  &.success {
+    color: #2e7d32;
+    background: #f0fff4;
+  }
+}

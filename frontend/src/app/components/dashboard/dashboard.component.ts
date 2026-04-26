@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ChartData, ChartType, ChartOptions } from 'chart.js';
 import { ExpenseService, Expense } from '../../services/expense.service';
 import { AuthService } from '../../services/auth.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -116,16 +117,27 @@ export class DashboardComponent implements OnInit {
     this.currentYear = now.getFullYear();
 
     // All-time totals
-    this.expenseService.getTotalExpenses(user.id).subscribe(total => {
-      this.totalExpenses = total || 0;
-      this.updateBudgetStatus();
-      this.isLoadingStats = false;
-    });
+    // this.expenseService.getTotalExpenses(user.id).subscribe(total => {
+    //   this.totalExpenses = total || 0;
+    //   this.updateBudgetStatus();
+    //   this.isLoadingStats = false;
+    // });
 
-    this.expenseService.getTotalIncome(user.id).subscribe(income => {
+    // this.expenseService.getTotalIncome(user.id).subscribe(income => {
+    //   this.totalIncome = income || 0;
+    //   this.netSavings = this.totalIncome - this.totalExpenses;
+    //   this.buildIncomeExpenseChart();
+    // });
+    forkJoin({
+      expenses: this.expenseService.getTotalExpenses(user.id),
+      income: this.expenseService.getTotalIncome(user.id)
+    }).subscribe(({ expenses, income }) => {
+      this.totalExpenses = expenses || 0;
       this.totalIncome = income || 0;
       this.netSavings = this.totalIncome - this.totalExpenses;
+      this.updateBudgetStatus();
       this.buildIncomeExpenseChart();
+      this.isLoadingStats = false;
     });
 
     // All transactions — for counts and charts
@@ -193,7 +205,8 @@ export class DashboardComponent implements OnInit {
   updateBudgetStatus(): void {
     const percent = (this.currentMonthSpent / this.budgetLimit) * 100;
     this.budgetUsedPercent = percent >= 100 ? 100 : Math.floor(percent);
-    if (percent >= 90) this.budgetStatus = 'danger';
+    if (percent >= 100) this.budgetStatus = 'danger';
+    else if (percent >= 90) this.budgetStatus = 'danger';
     else if (percent >= 70) this.budgetStatus = 'warning';
     else this.budgetStatus = 'safe';
   }

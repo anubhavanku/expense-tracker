@@ -9,6 +9,7 @@ import { AnalyticsComponent } from './components/analytics/analytics.component';
 import { AuthGuard } from './guards/auth.guard';
 import { BudgetComponent } from './components/budget/budget.component';
 import { InsightsComponent } from './components/insights/insights.component';
+import { RecurringComponent } from './components/recurring/recurring.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -38,6 +39,10 @@ const routes: Routes = [
     path: 'insights', component: InsightsComponent,
     canActivate: [AuthGuard]
   },
+  {
+    path: 'recurring', component: RecurringComponent,
+    canActivate: [AuthGuard]
+  }
 ];
 
 @NgModule({

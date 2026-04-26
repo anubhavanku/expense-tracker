@@ -1,8 +1,6 @@
 package com.expensetracker.model;
 
 import jakarta.persistence.*;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -10,8 +8,8 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "expenses")
-public class Expense {
+@Table(name = "recurring_transactions")
+public class RecurringTransaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,20 +29,26 @@ public class Expense {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private TransactionType type = TransactionType.EXPENSE;
+    private Expense.TransactionType type = Expense.TransactionType.EXPENSE;
 
-    public enum TransactionType {
-        INCOME, EXPENSE
-    }
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private FrequencyType frequency;
 
-    @Column(name = "is_recurring")
-    private Boolean isRecurring = false;
+    @Column(name = "start_date", nullable = false)
+    private LocalDate startDate;
 
-    @Column(name = "recurring_id")
-    private Long recurringId;
+    @Column(name = "end_date")
+    private LocalDate endDate;
 
-    @Column(name = "expense_date", nullable = false)
-    private LocalDate expenseDate;
+    @Column(name = "next_due_date", nullable = false)
+    private LocalDate nextDueDate;
+
+    @Column(name = "last_processed_date")
+    private LocalDate lastProcessedDate;
+
+    @Column(nullable = false)
+    private Boolean active = true;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -56,5 +60,9 @@ public class Expense {
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
+    }
+
+    public enum FrequencyType {
+        DAILY, WEEKLY, MONTHLY, YEARLY
     }
 }
