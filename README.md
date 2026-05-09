@@ -291,6 +291,32 @@ Push to main
     └── Push to GitHub Container Registry
 ```
 
+## 📸 Screenshots
+
+### Dashboard
+![Dashboard](screenshots/dashboard.png)
+
+### Dark Mode
+![Dark Mode](screenshots/dashboard-dark.png)
+
+### Transactions
+![Transactions](screenshots/expenses.png)
+
+### Budget Management
+![Budget](screenshots/budget.png)
+
+### Analytics
+![Analytics](screenshots/analytics.png)
+
+### Smart Insights
+![Insights](screenshots/insights.png)
+
+### Recurring Transactions
+![Recurring](screenshots/recurring.png)
+
+### Mobile View
+![Mobile](screenshots/mobile.png)
+
 **Docker images available at:**
 
 ```
