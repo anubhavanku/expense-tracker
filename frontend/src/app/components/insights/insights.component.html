@@ -49,6 +49,12 @@
                         insight.type === 'warning' ? 'Watch out' : 'Info' }}
                     </span>
                 </div>
+
+                <button mat-stroked-button *ngIf="insight.action" class="action-btn" [ngClass]="insight.type"
+                    (click)="handleAction(insight)">
+                    {{ insight.action.label }}
+                    <mat-icon>arrow_forward</mat-icon>
+                </button>
             </mat-card-content>
         </mat-card>
     </div>

@@ -12,12 +12,21 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
 export class NavbarComponent {
   @Input() isDarkMode = false;
   @Output() toggleDark = new EventEmitter<void>();
+  isMenuOpen = false;
 
   constructor(
     public authService: AuthService,
     private router: Router,
     private dialog: MatDialog
   ) {}
+
+  toggleMenu(): void {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  closeMenu(): void {
+    this.isMenuOpen = false;
+  }
 
   logout(): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
@@ -31,6 +40,7 @@ export class NavbarComponent {
     });
     dialogRef.afterClosed().subscribe(confirmed => {
       if (confirmed) {
+        this.isMenuOpen = false;
         this.authService.logout();
       }
     });

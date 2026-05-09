@@ -2,55 +2,103 @@
   <span class="brand-text">💰 Expense Tracker</span>
   <span class="spacer"></span>
 
-  <div class="nav-links">
-    <ng-container *ngIf="authService.isLoggedIn()">
-      <button mat-button routerLink="/dashboard" routerLinkActive="active-link" matTooltip="Dashboard">
-        <mat-icon>dashboard</mat-icon>
-        <span class="nav-text">Dashboard</span>
-      </button>
-
-      <button mat-button routerLink="/expenses" routerLinkActive="active-link" matTooltip="Expenses">
-        <mat-icon>receipt_long</mat-icon>
-        <span class="nav-text">Expenses</span>
-      </button>
-
-      <button mat-button routerLink="/budget" routerLinkActive="active-link" matTooltip="Budget">
-        <mat-icon>account_balance_wallet</mat-icon>
-        <span class="nav-text">Budget</span>
-      </button>
-
-      <button mat-button routerLink="/analytics" routerLinkActive="active-link" matTooltip="Analytics">
-        <mat-icon>bar_chart</mat-icon>
-        <span class="nav-text">Analytics</span>
-      </button>
-
-      <button mat-button routerLink="/insights" routerLinkActive="active-link" matTooltip="Insights">
-        <mat-icon>lightbulb</mat-icon>
-        <span class="nav-text">Insights</span>
-      </button>
-
-      <button mat-button routerLink="/recurring" routerLinkActive="active-link" matTooltip="Recurring">
-        <mat-icon>autorenew</mat-icon>
-        <span class="nav-text">Recurring</span>
-      </button>
-
-      <button mat-button routerLink="/profile" routerLinkActive="active-link" matTooltip="Profile">
-        <mat-icon>person</mat-icon>
-        <span class="nav-text">Profile</span>
-      </button>
-
-      <button mat-icon-button (click)="toggleDark.emit()" [matTooltip]="isDarkMode ? 'Light Mode' : 'Dark Mode'">
-        <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
-      </button>
-
-      <button mat-icon-button (click)="logout()" matTooltip="Logout">
-        <mat-icon>logout</mat-icon>
-      </button>
-    </ng-container>
-
-    <ng-container *ngIf="!authService.isLoggedIn()">
-      <button mat-button routerLink="/login">Login</button>
-      <button mat-button routerLink="/register">Register</button>
-    </ng-container>
+  <!-- Desktop nav -->
+  <div class="desktop-nav" *ngIf="authService.isLoggedIn()">
+    <button mat-button routerLink="/dashboard" routerLinkActive="active-link" matTooltip="Dashboard">
+      <mat-icon>dashboard</mat-icon>
+      <span class="nav-text">Dashboard</span>
+    </button>
+    <button mat-button routerLink="/expenses" routerLinkActive="active-link" matTooltip="Expenses">
+      <mat-icon>receipt_long</mat-icon>
+      <span class="nav-text">Expenses</span>
+    </button>
+    <button mat-button routerLink="/budget" routerLinkActive="active-link" matTooltip="Budget">
+      <mat-icon>account_balance_wallet</mat-icon>
+      <span class="nav-text">Budget</span>
+    </button>
+    <button mat-button routerLink="/analytics" routerLinkActive="active-link" matTooltip="Analytics">
+      <mat-icon>bar_chart</mat-icon>
+      <span class="nav-text">Analytics</span>
+    </button>
+    <button mat-button routerLink="/insights" routerLinkActive="active-link" matTooltip="Insights">
+      <mat-icon>lightbulb</mat-icon>
+      <span class="nav-text">Insights</span>
+    </button>
+    <button mat-button routerLink="/recurring" routerLinkActive="active-link" matTooltip="Recurring">
+      <mat-icon>autorenew</mat-icon>
+      <span class="nav-text">Recurring</span>
+    </button>
+    <button mat-button routerLink="/profile" routerLinkActive="active-link" matTooltip="Profile">
+      <mat-icon>person</mat-icon>
+      <span class="nav-text">Profile</span>
+    </button>
+    <!-- Dark mode inside desktop nav -->
+    <button mat-icon-button (click)="toggleDark.emit()" [matTooltip]="isDarkMode ? 'Light Mode' : 'Dark Mode'">
+      <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
+    </button>
+    <button mat-icon-button (click)="logout()" matTooltip="Logout">
+      <mat-icon>logout</mat-icon>
+    </button>
   </div>
+
+  <!-- Desktop login/register -->
+  <div class="desktop-nav" *ngIf="!authService.isLoggedIn()">
+    <button mat-button routerLink="/login">Login</button>
+    <button mat-button routerLink="/register">Register</button>
+  </div>
+
+  <!-- Mobile hamburger only -->
+  <button mat-icon-button class="mobile-menu-btn" (click)="toggleMenu()" *ngIf="authService.isLoggedIn()">
+    <mat-icon>{{ isMenuOpen ? 'close' : 'menu' }}</mat-icon>
+  </button>
 </mat-toolbar>
+
+<!-- Mobile dropdown menu -->
+<div class="mobile-menu" [ngClass]="{'open': isMenuOpen}" *ngIf="authService.isLoggedIn()">
+
+  <a class="mobile-menu-item" routerLink="/dashboard" routerLinkActive="mobile-active" (click)="closeMenu()">
+    <mat-icon>dashboard</mat-icon>
+    <span>Dashboard</span>
+  </a>
+  <a class="mobile-menu-item" routerLink="/expenses" routerLinkActive="mobile-active" (click)="closeMenu()">
+    <mat-icon>receipt_long</mat-icon>
+    <span>Expenses</span>
+  </a>
+  <a class="mobile-menu-item" routerLink="/budget" routerLinkActive="mobile-active" (click)="closeMenu()">
+    <mat-icon>account_balance_wallet</mat-icon>
+    <span>Budget</span>
+  </a>
+  <a class="mobile-menu-item" routerLink="/analytics" routerLinkActive="mobile-active" (click)="closeMenu()">
+    <mat-icon>bar_chart</mat-icon>
+    <span>Analytics</span>
+  </a>
+  <a class="mobile-menu-item" routerLink="/insights" routerLinkActive="mobile-active" (click)="closeMenu()">
+    <mat-icon>lightbulb</mat-icon>
+    <span>Insights</span>
+  </a>
+  <a class="mobile-menu-item" routerLink="/recurring" routerLinkActive="mobile-active" (click)="closeMenu()">
+    <mat-icon>autorenew</mat-icon>
+    <span>Recurring</span>
+  </a>
+  <a class="mobile-menu-item" routerLink="/profile" routerLinkActive="mobile-active" (click)="closeMenu()">
+    <mat-icon>person</mat-icon>
+    <span>Profile</span>
+  </a>
+
+  <!-- Dark mode in mobile menu too -->
+  <div class="mobile-menu-divider"></div>
+
+  <a class="mobile-menu-item" (click)="toggleDark.emit(); closeMenu()">
+    <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
+    <span>{{ isDarkMode ? 'Light Mode' : 'Dark Mode' }}</span>
+  </a>
+
+  <a class="mobile-menu-item logout-item" (click)="logout()">
+    <mat-icon>logout</mat-icon>
+    <span>Logout</span>
+  </a>
+</div>
+
+<!-- Overlay -->
+<div class="menu-overlay" *ngIf="isMenuOpen" (click)="closeMenu()">
+</div>

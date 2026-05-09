@@ -984,6 +984,28 @@ a {
     }
   }
 
+  .action-btn {
+    &.positive {
+      color: #66bb6a !important;
+      border-color: #66bb6a !important;
+    }
+
+    &.negative {
+      color: #ef5350 !important;
+      border-color: #ef5350 !important;
+    }
+
+    &.warning {
+      color: #ffa726 !important;
+      border-color: #ffa726 !important;
+    }
+
+    &.neutral {
+      color: #42a5f5 !important;
+      border-color: #42a5f5 !important;
+    }
+  }
+
   .skeleton-card {
     background: linear-gradient(90deg, #2a2a2a 25%, #333 50%, #2a2a2a 75%) !important;
     background-size: 200% 100% !important;

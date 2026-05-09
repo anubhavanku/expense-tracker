@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ExpenseService, Expense } from '../../services/expense.service';
 import { AuthService } from '../../services/auth.service';
 
@@ -8,6 +9,11 @@ export interface Insight {
   message: string;
   type: 'positive' | 'negative' | 'warning' | 'neutral';
   value?: string;
+  action?: {
+    label: string;
+    route?: string;
+    callback?: () => void;
+  };
 }
 
 @Component({
@@ -25,7 +31,8 @@ export class InsightsComponent implements OnInit {
 
   constructor(
     private expenseService: ExpenseService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -48,8 +55,10 @@ export class InsightsComponent implements OnInit {
     const lastMonthExpenses = this.getMonthExpenses(
       lastMonthDate.year, lastMonthDate.month);
 
-    this.insightMonthlyComparison(thisMonthExpenses, lastMonthExpenses);
-    this.insightCategorySpikes(thisMonthExpenses, lastMonthExpenses);
+    this.insightMonthlyComparison(
+      thisMonthExpenses, lastMonthExpenses);
+    this.insightCategorySpikes(
+      thisMonthExpenses, lastMonthExpenses);
     this.insightSavingsRate();
     this.insightTopSpendingDay(thisMonthExpenses);
     this.insightMonthlyPrediction(thisMonthExpenses);
@@ -57,14 +66,22 @@ export class InsightsComponent implements OnInit {
     this.insightNoSpendingDays(thisMonthExpenses);
     this.insightMostExpensiveCategory(thisMonthExpenses);
 
-    // Sort — show negatives first, then warnings, then positives
     this.insights.sort((a, b) => {
-      const order = { negative: 0, warning: 1, neutral: 2, positive: 3 };
+      const order = {
+        negative: 0, warning: 1, neutral: 2, positive: 3
+      };
       return order[a.type] - order[b.type];
     });
   }
 
-  // 1. Overall month comparison
+  handleAction(insight: Insight): void {
+    if (insight.action?.route) {
+      this.router.navigate([insight.action.route]);
+    } else if (insight.action?.callback) {
+      insight.action.callback();
+    }
+  }
+
   private insightMonthlyComparison(
     thisMonth: Expense[], lastMonth: Expense[]): void {
     const thisTotal = this.sum(thisMonth);
@@ -76,7 +93,11 @@ export class InsightsComponent implements OnInit {
         title: 'First Month Tracked',
         message: `You've spent ₹${this.fmt(thisTotal)} this month. Keep tracking to see trends!`,
         type: 'neutral',
-        value: `₹${this.fmt(thisTotal)}`
+        value: `₹${this.fmt(thisTotal)}`,
+        action: {
+          label: 'View Transactions',
+          route: '/expenses'
+        }
       });
       return;
     }
@@ -88,22 +109,29 @@ export class InsightsComponent implements OnInit {
       this.insights.push({
         icon: '📈',
         title: 'Spending Increased',
-        message: `You spent ${absDiff.toFixed(0)}% more this month (₹${this.fmt(thisTotal)}) compared to last month (₹${this.fmt(lastTotal)}).`,
+        message: `You spent ${absDiff.toFixed(0)}% more this month (₹${this.fmt(thisTotal)}) vs last month (₹${this.fmt(lastTotal)}).`,
         type: absDiff > 20 ? 'negative' : 'warning',
-        value: `+${absDiff.toFixed(0)}%`
+        value: `+${absDiff.toFixed(0)}%`,
+        action: {
+          label: 'Review Expenses',
+          route: '/expenses'
+        }
       });
     } else {
       this.insights.push({
         icon: '📉',
         title: 'Spending Decreased',
-        message: `Great job! You spent ${absDiff.toFixed(0)}% less this month (₹${this.fmt(thisTotal)}) compared to last month (₹${this.fmt(lastTotal)}).`,
+        message: `Great job! You spent ${absDiff.toFixed(0)}% less this month (₹${this.fmt(thisTotal)}) vs last month (₹${this.fmt(lastTotal)}).`,
         type: 'positive',
-        value: `-${absDiff.toFixed(0)}%`
+        value: `-${absDiff.toFixed(0)}%`,
+        action: {
+          label: 'See Analytics',
+          route: '/analytics'
+        }
       });
     }
   }
 
-  // 2. Category spikes
   private insightCategorySpikes(
     thisMonth: Expense[], lastMonth: Expense[]): void {
     const thisMap = this.groupByCategory(thisMonth);
@@ -112,9 +140,7 @@ export class InsightsComponent implements OnInit {
     Object.keys(thisMap).forEach(category => {
       const thisAmt = thisMap[category];
       const lastAmt = lastMap[category] || 0;
-
       if (lastAmt === 0) return;
-
       const diff = ((thisAmt - lastAmt) / lastAmt) * 100;
 
       if (diff >= 50) {
@@ -123,7 +149,11 @@ export class InsightsComponent implements OnInit {
           title: `${category} Spending Spiked`,
           message: `Your ${category} spending increased by ${diff.toFixed(0)}% this month (₹${this.fmt(thisAmt)} vs ₹${this.fmt(lastAmt)} last month).`,
           type: 'warning',
-          value: `+${diff.toFixed(0)}%`
+          value: `+${diff.toFixed(0)}%`,
+          action: {
+            label: `Set ${category} Budget`,
+            route: '/budget'
+          }
         });
       } else if (diff <= -30) {
         this.insights.push({
@@ -131,19 +161,17 @@ export class InsightsComponent implements OnInit {
           title: `${category} Spending Down`,
           message: `You cut ${category} spending by ${Math.abs(diff).toFixed(0)}% this month. Great discipline!`,
           type: 'positive',
-          value: `-${Math.abs(diff).toFixed(0)}%`
+          value: `-${Math.abs(diff).toFixed(0)}%`,
+          action: {
+            label: 'See Full Analytics',
+            route: '/analytics'
+          }
         });
       }
     });
   }
 
-  // 3. Savings rate
   private insightSavingsRate(): void {
-    const allIncome = this.allExpenses; // already filtered
-    const incomeExpenses = this.allExpenses.filter(
-      e => (e as any).type === 'INCOME');
-
-    // Use all transactions including income
     const user = this.authService.getCurrentUser();
     if (!user) return;
 
@@ -170,17 +198,25 @@ export class InsightsComponent implements OnInit {
         this.insights.push({
           icon: '🏆',
           title: 'Excellent Savings Rate',
-          message: `You're saving ${savingsRate.toFixed(0)}% of your income this month. That's outstanding financial health!`,
+          message: `You're saving ${savingsRate.toFixed(0)}% of your income this month. Outstanding financial health!`,
           type: 'positive',
-          value: `${savingsRate.toFixed(0)}%`
+          value: `${savingsRate.toFixed(0)}%`,
+          action: {
+            label: 'View Dashboard',
+            route: '/dashboard'
+          }
         });
       } else if (savingsRate >= 10) {
         this.insights.push({
           icon: '💰',
           title: 'Good Savings Rate',
-          message: `You're saving ${savingsRate.toFixed(0)}% of your income this month. Aim for 20-30% for optimal savings.`,
+          message: `You're saving ${savingsRate.toFixed(0)}% of your income. Aim for 20-30% for optimal savings.`,
           type: 'neutral',
-          value: `${savingsRate.toFixed(0)}%`
+          value: `${savingsRate.toFixed(0)}%`,
+          action: {
+            label: 'Set Budget Goals',
+            route: '/budget'
+          }
         });
       } else if (savingsRate > 0) {
         this.insights.push({
@@ -188,30 +224,37 @@ export class InsightsComponent implements OnInit {
           title: 'Low Savings Rate',
           message: `You're only saving ${savingsRate.toFixed(0)}% of your income. Consider reducing discretionary spending.`,
           type: 'warning',
-          value: `${savingsRate.toFixed(0)}%`
+          value: `${savingsRate.toFixed(0)}%`,
+          action: {
+            label: 'Review Budgets',
+            route: '/budget'
+          }
         });
       } else {
         this.insights.push({
           icon: '🚨',
           title: 'Spending Exceeds Income',
-          message: `Your expenses exceed your income this month by ₹${this.fmt(Math.abs(income - expense))}. Review your spending urgently.`,
+          message: `Your expenses exceed income by ₹${this.fmt(Math.abs(income - expense))} this month.`,
           type: 'negative',
-          value: `-₹${this.fmt(Math.abs(income - expense))}`
+          value: `-₹${this.fmt(Math.abs(income - expense))}`,
+          action: {
+            label: 'Cut Expenses Now',
+            route: '/expenses'
+          }
         });
       }
     });
   }
 
-  // 4. Most expensive day of week
   private insightTopSpendingDay(expenses: Expense[]): void {
     if (expenses.length === 0) return;
-
     const days = ['Sunday', 'Monday', 'Tuesday',
       'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const dayMap: { [k: string]: number } = {};
 
     expenses.forEach(e => {
-      const day = days[new Date(e.expenseDate + 'T00:00:00').getDay()];
+      const day = days[
+        new Date(e.expenseDate + 'T00:00:00').getDay()];
       dayMap[day] = (dayMap[day] || 0) + Number(e.amount);
     });
 
@@ -221,13 +264,16 @@ export class InsightsComponent implements OnInit {
     this.insights.push({
       icon: '📆',
       title: 'Highest Spending Day',
-      message: `You tend to spend the most on ${topDay}s this month (₹${this.fmt(dayMap[topDay])}). Plan your budget accordingly.`,
+      message: `You spend the most on ${topDay}s (₹${this.fmt(dayMap[topDay])}). Plan your budget accordingly.`,
       type: 'neutral',
-      value: topDay
+      value: topDay,
+      action: {
+        label: 'View Transactions',
+        route: '/expenses'
+      }
     });
   }
 
-  // 5. End of month prediction
   private insightMonthlyPrediction(expenses: Expense[]): void {
     const today = new Date();
     const dayOfMonth = today.getDate();
@@ -243,19 +289,20 @@ export class InsightsComponent implements OnInit {
     this.insights.push({
       icon: '🔮',
       title: 'Projected Monthly Spend',
-      message: `Based on your spending so far, you're on track to spend ₹${this.fmt(projected)} this month.`,
+      message: `Based on your pace, you'll spend ₹${this.fmt(projected)} this month. ${projected > totalSoFar * 1.3 ? 'Consider slowing down.' : 'You\'re on a good track!'}`,
       type: projected > totalSoFar * 1.5 ? 'warning' : 'neutral',
-      value: `₹${this.fmt(projected)}`
+      value: `₹${this.fmt(projected)}`,
+      action: {
+        label: 'Check Budget',
+        route: '/budget'
+      }
     });
   }
 
-  // 6. Largest single expense this month
   private insightLargestExpense(expenses: Expense[]): void {
     if (expenses.length === 0) return;
-
     const largest = expenses.reduce((a, b) =>
       Number(a.amount) > Number(b.amount) ? a : b);
-
     const total = this.sum(expenses);
     const percent = (Number(largest.amount) / total) * 100;
 
@@ -263,19 +310,22 @@ export class InsightsComponent implements OnInit {
       this.insights.push({
         icon: '💸',
         title: 'Large Single Expense',
-        message: `"${largest.title}" (₹${this.fmt(Number(largest.amount))}) accounts for ${percent.toFixed(0)}% of your total spending this month.`,
+        message: `"${largest.title}" (₹${this.fmt(Number(largest.amount))}) is ${percent.toFixed(0)}% of your total spending this month.`,
         type: percent > 50 ? 'warning' : 'neutral',
-        value: `${percent.toFixed(0)}%`
+        value: `${percent.toFixed(0)}%`,
+        action: {
+          label: 'View Expense',
+          route: '/expenses'
+        }
       });
     }
   }
 
-  // 7. No-spend days
   private insightNoSpendingDays(expenses: Expense[]): void {
     const today = new Date();
     const dayOfMonth = today.getDate();
-
-    const spendDays = new Set(expenses.map(e => e.expenseDate)).size;
+    const spendDays = new Set(
+      expenses.map(e => e.expenseDate)).size;
     const noSpendDays = dayOfMonth - spendDays;
 
     if (noSpendDays >= 5) {
@@ -284,15 +334,18 @@ export class InsightsComponent implements OnInit {
         title: 'No-Spend Days',
         message: `You had ${noSpendDays} no-spend days this month! That's excellent spending discipline.`,
         type: 'positive',
-        value: `${noSpendDays} days`
+        value: `${noSpendDays} days`,
+        action: {
+          label: 'Keep it up!',
+          route: '/dashboard'
+        }
       });
     }
   }
 
-  // 8. Most expensive category
-  private insightMostExpensiveCategory(expenses: Expense[]): void {
+  private insightMostExpensiveCategory(
+    expenses: Expense[]): void {
     if (expenses.length === 0) return;
-
     const map = this.groupByCategory(expenses);
     const total = this.sum(expenses);
     const topCat = Object.keys(map).reduce(
@@ -303,28 +356,36 @@ export class InsightsComponent implements OnInit {
       this.insights.push({
         icon: '🏷️',
         title: `${topCat} Dominates Budget`,
-        message: `${topCat} makes up ${percent.toFixed(0)}% of your spending this month (₹${this.fmt(map[topCat])}). Consider if this aligns with your priorities.`,
+        message: `${topCat} is ${percent.toFixed(0)}% of spending this month (₹${this.fmt(map[topCat])}). Consider setting a budget limit.`,
         type: percent > 60 ? 'warning' : 'neutral',
-        value: `${percent.toFixed(0)}%`
+        value: `${percent.toFixed(0)}%`,
+        action: {
+          label: `Budget ${topCat}`,
+          route: '/budget'
+        }
       });
     }
   }
 
   // Helpers
-  private getMonthExpenses(year: number, month: number): Expense[] {
+  private getMonthExpenses(
+    year: number, month: number): Expense[] {
     return this.allExpenses.filter(e => {
       const d = new Date(e.expenseDate + 'T00:00:00');
-      return d.getMonth() + 1 === month && d.getFullYear() === year;
+      return d.getMonth() + 1 === month
+        && d.getFullYear() === year;
     });
   }
 
   private getLastMonth(): { year: number; month: number } {
-    const d = new Date(this.currentYear, this.currentMonth - 2, 1);
+    const d = new Date(
+      this.currentYear, this.currentMonth - 2, 1);
     return { year: d.getFullYear(), month: d.getMonth() + 1 };
   }
 
   private sum(expenses: Expense[]): number {
-    return expenses.reduce((s, e) => s + Number(e.amount), 0);
+    return expenses.reduce(
+      (s, e) => s + Number(e.amount), 0);
   }
 
   private fmt(amount: number): string {
@@ -333,10 +394,12 @@ export class InsightsComponent implements OnInit {
     });
   }
 
-  private groupByCategory(expenses: Expense[]): { [k: string]: number } {
+  private groupByCategory(
+    expenses: Expense[]): { [k: string]: number } {
     const map: { [k: string]: number } = {};
     expenses.forEach(e => {
-      map[e.category] = (map[e.category] || 0) + Number(e.amount);
+      map[e.category] = (map[e.category] || 0)
+        + Number(e.amount);
     });
     return map;
   }

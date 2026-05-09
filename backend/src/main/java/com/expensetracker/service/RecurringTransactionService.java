@@ -101,7 +101,7 @@ public class RecurringTransactionService {
     @Scheduled(cron = "0 0 0 * * *")
     @Transactional
     public void processRecurringTransactions() {
-        log.info("Processing recurring transactions for date: {}",
+        log.info("Processing recurring transactions for: {}",
                 LocalDate.now());
 
         List<RecurringTransaction> dueTransactions = recurringRepository
@@ -118,7 +118,7 @@ public class RecurringTransactionService {
                     continue;
                 }
 
-                // Check if end date has passed
+                // Check end date
                 if (recurring.getEndDate() != null
                         && LocalDate.now()
                         .isAfter(recurring.getEndDate())) {
@@ -127,10 +127,29 @@ public class RecurringTransactionService {
                     continue;
                 }
 
-                // Create the expense
+                // Only process if due date is today or yesterday
+                // (not months in the past — that means data issue)
+                LocalDate nextDue = recurring.getNextDueDate();
+                if (nextDue.isBefore(LocalDate.now().minusDays(1))) {
+                    // Fast-forward next due to future
+                    // without creating transactions for past dates
+                    log.warn("Fast-forwarding stale recurring: {}",
+                            recurring.getTitle());
+                    while (recurring.getNextDueDate()
+                            .isBefore(LocalDate.now())) {
+                        recurring.setNextDueDate(
+                                calculateNextDueDate(
+                                        recurring.getNextDueDate(),
+                                        recurring.getFrequency()));
+                    }
+                    recurringRepository.save(recurring);
+                    continue;
+                }
+
+                // Create expense for today
                 createExpenseFromRecurring(recurring);
 
-                // Update next due date and last processed
+                // Update next due date
                 recurring.setLastProcessedDate(LocalDate.now());
                 recurring.setNextDueDate(
                         calculateNextDueDate(
